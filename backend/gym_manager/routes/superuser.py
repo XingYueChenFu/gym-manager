@@ -154,3 +154,11 @@ def show_deal():
     deals = db.session.query(Deal).all()
     return render_template('superuser/show_deal.html', deals=deals)
 
+# ===== init table data =====
+from faker import Faker
+fake = Faker()
+# [开发中]
+@super_bp.route('/init_all', methods=['GET'])
+def init_all():
+    print('\033[1;34m[debug]\033[0m init_all')
+    

@@ -18,19 +18,19 @@ from datetime import datetime
 # @staff_bp.route('/login', methods=['GET'])
 # def do_login_get():
 #     return render_template('staff/login.html'), 200
-# # [测试中] 登录 # /staff/login
-# @staff_bp.route('/login', methods=['POST'])
-# def do_login():
-#     # staff = Staff.query.filter(Staff.username == request.json.get('username')).first()
-#     staff = Staff.query.filter_by(username=request.json.get('username')).first()
+# [测试中] 登录 # /staff/login
+@staff_bp.route('/login', methods=['POST'])
+def do_login():
+    # staff = Staff.query.filter(Staff.username == request.json.get('username')).first()
+    staff = Staff.query.filter_by(username=request.json.get('username')).first()
     
-#     if staff is not None:
-#         md = hashlib.md5()
-#         md.update(request.json.get('password').encode('utf-8'))
-#         if md.hexdigest() == staff.password:
-#             login_user(staff)
-#             return jsonify({'msg': '成功', 'code': 200, 'level': staff.level, 'token': str(uuid.uuid4())}) # 前端：登录成功
-#     return jsonify({'msg': '登录失败，账号或密码错误', 'code': 2003})
+    if staff is not None:
+        md = hashlib.md5()
+        md.update(request.json.get('password').encode('utf-8'))
+        if md.hexdigest() == staff.password:
+            login_user(staff)
+            return jsonify({'msg': '成功', 'code': 200, 'level': staff.level, 'token': str(uuid.uuid4())}) # 前端：登录成功
+    return jsonify({'msg': '登录失败，账号或密码错误', 'code': 2003})
 
 # [测试中] 退出登录
 @staff_bp.route('/logout', methods=['POST'])    
