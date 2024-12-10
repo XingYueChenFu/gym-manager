@@ -57,8 +57,8 @@ def superuser_register_post():
         
         print('\033[1;32m[SUCCESS]\033[0m Register success.')
         # return jsonify({'msg': 'Register success.', 'code': 200})
-        print(url_for('base.superuser.login'))
-        return redirect(url_for('base.superuser_register_get'))
+        print(url_for('super.superuser_login_get'))
+        return redirect(url_for('super.superuser_login_get'))
         
     print('\033[1;31m[ERROR]\033[0m {}'.format(error))
     return jsonify({'msg': error, 'code': 5002})
@@ -109,12 +109,25 @@ def superuser_index_get():
 
 # ===== add table data =====
 
-@super_bp.route('/add_member', methods=['GET'])
-def add_member():
-    print('\033[1;34m[debug]\033[0m add_member')
+@super_bp.route('/add_member', methods=['GET', 'OPTIONS'])
+def add_member_get():
+    print('\033[1;34m[debug]\033[0m add_member get')
     return render_template('superuser/add_member.html')
 
-
+@super_bp.route('/add_member', methods=['POST'])
+def add_member_post():
+    print('\033[1;34m[debug]\033[0m add_member_post')
+    phone = request.form.get('phone_number')
+    nickname = request.form.get('nickname')
+    realname = request.form.get('realname')
+    id_card = request.form.get('id_card')
+    student_card = request.form.get('student_card')
+    sex = request.form.get('sex')
+    member = Member(phone_number=phone, nickname=nickname, realname=realname, id_card=id_card, student_card=student_card, sex=sex)
+    db.session.add(member)
+    db.session.commit()
+    return redirect(url_for('super.show_member'))
+    
 # ===== delete table data =====
 
 

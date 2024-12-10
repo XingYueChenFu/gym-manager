@@ -11,14 +11,14 @@ class Config:
     JSON_AS_ASCII = False
     
     # 自定义参数
-    RESET_DATABASE = False # 重置数据库
+    RESET_DATABASE = False # 重置数据库 (不)
     HOST_IPV4 = '127.0.0.1'
     PORT = 5000
     
 
 # ===== 开发环境配置 ===== 
 class DevelopmentConfig(Config):  # 开发模式
-    # RESET_DATABASE = True
+    # RESET_DATABASE = True # 重置数据库
     DEBUG = True
 
 # ===== 测试环境配置 ===== 
