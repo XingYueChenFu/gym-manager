@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>debug_show_user</title>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th>用户名</th>
+          <th>密码</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for staff in staffs %}
+        <tr>
+          <td>{{ staff.staff_id }}</td>
+          <td>{{ staff.username }}</td>
+          <td>{{ staff.password }}</td>
+          <td>{{ staff.level }}</td>
+          <td>{{ staff.create_time }}</td>
+          <td>{{ staff.employee_info }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>

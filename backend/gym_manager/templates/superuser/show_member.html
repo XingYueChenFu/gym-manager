@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>debug_show_user</title>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th>用户名</th>
+          <th>密码</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for member in members %}
+        <tr>
+          <td>{{ member.id }}</td>
+          <td>{{ member.phone_number }}</td>
+          <td>{{ member.regist_time }}</td>
+          <td>{{ member.nickname }}</td>
+          <td>{{ member.real_name }}</td>
+          <td>{{ member.id_card }}</td>
+          <td>{{ member.student_card }}</td>
+          <td>{{ member.sex }}</td>
+          <td>{{ member.email }}</td>
+          <td>{{ member.birthdate }}</td>
+          <td>{{ member.password }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>

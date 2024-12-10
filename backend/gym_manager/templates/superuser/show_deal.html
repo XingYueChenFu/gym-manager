@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>debug_show_user</title>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th>用户名</th>
+          <th>密码</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for deal in deals %}
+        <tr>
+          <td>{{ deal.activity_id }}</td>
+          <td>{{ deal.plan_id }}</td>
+          <td>{{ deal.activity_name }}</td>
+          <td>{{ deal.start_time }}</td>
+          <td>{{ deal.end_time }}</td>
+          <td>{{ deal.recharge_type }}</td>
+          <td>{{ deal.recharge_count }}</td>
+          <td>{{ deal.lifespan }}</td>
+          <td>{{ deal.recharge_day }}</td>
+          <td>{{ deal.amount }}</td>
+          <td>{{ deal.activity_remark }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>

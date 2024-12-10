@@ -1,0 +1,9 @@
+test/
+__pycache__/
+.vscode/
+frontend/node_modules/
+
+doc/临时用.md
+
+# 含 ‘备份’ 的文件和目录
+*备份*

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/superuser/register" method="post">
+        <div>
+            <label for="username">用户名</label>
+            <input type="text" name="username" id="username">
+        </div>
+        <div>
+            <label for="password">密码</label>
+            <input type="password" name="password" id="password">
+        </div>
+        <div>
+            <label for="password_confirmation">确认密码</label>
+            <input type="password" name="password_confirmation" id="password_confirmation">
+        </div>
+        <script>
+            function checkPassword() {
+                var password = document.getElementById('password').value;
+                var password_confirmation = document.getElementById('password_confirmation').value;
+                if (password !== password_confirmation) {
+                    alert('两次输入的密码不一致');
+                    return false;
+                }
+                return true;
+            }
+        </script>
+        <!-- level 选择 1,2,3 -->
+        <div>
+            <label for="level">用户等级</label>
+            <select name="level" id="level">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+            </select>
+        <button type="submit">注册</button>
+    </form>
+    <a href="/superuser/login">登录</a>
+</body>
+</html>
