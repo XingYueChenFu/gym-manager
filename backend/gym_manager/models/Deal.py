@@ -12,7 +12,7 @@ class Deal(db.Model):
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
 
-    recharge_type = db.Column(db.String(10), nullable=False)
+    recharge_type = db.Column(db.String(10), nullable=False) # 充值类型 time:时间 count:次数
     recharge_count = db.Column(db.Integer)
     lifespan = db.Column(db.Integer)
     recharge_day = db.Column(db.Integer)

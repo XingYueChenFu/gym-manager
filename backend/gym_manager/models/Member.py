@@ -13,7 +13,7 @@ class Member(db.Model):
     realname = db.Column(db.String(50)) # 可有可无
     id_card = db.Column(db.String(18))
     student_card = db.Column(db.String(13))
-    sex = db.Column(db.String(1)) # 可有可无
+    gender = db.Column(db.String(1)) # 可有可无 # F:女 M:男 O:其他
     email = db.Column(db.String(255)) # 可有可无
     birthdate = db.Column(db.DateTime) # 可有可无 非birthday
     password = db.Column(db.String(255)) # 可有可无
@@ -34,7 +34,7 @@ class Member(db.Model):
             'realname': self.realname,
             'id_card': self.id_card,
             'student_card': self.student_card,
-            'sex': self.sex,
+            'gender': self.gender, 
         }
         
         return json

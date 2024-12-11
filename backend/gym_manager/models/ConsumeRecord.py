@@ -6,7 +6,7 @@ class ConsumeRecord(db.Model):
     # 定义表的字段
     member_id = db.Column(db.Integer, nullable=False)
     consume_time = db.Column(db.DateTime, nullable=False)
-    consume_type = db.Column(db.String(10), nullable=False)
+    consume_type = db.Column(db.String(10), nullable=False) # 消费类型 time:时间 count:次数
 
     # 联合主键
     __table_args__ = (

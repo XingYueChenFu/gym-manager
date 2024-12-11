@@ -28,7 +28,7 @@ def staff_regist_member():
     member.realname = request.json.get('realname')
     member.id_card = request.json.get('id_card')
     member.student_card = request.json.get('student_card')
-    member.sex = request.json.get('sex')
+    member.gender = request.json.get('gender')
     member.password = md.hexdigest()
     
     if db.session.query(Member).filter_by(phone_number=member.phone_number).first() is not None:
