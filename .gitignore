@@ -3,7 +3,9 @@ __pycache__/
 .vscode/
 frontend/node_modules/
 
+# 无用的文件
 doc/临时用.md
+backend.zip
 
 # 含 ‘备份’ 的文件和目录
 *备份*
