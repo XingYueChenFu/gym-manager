@@ -236,7 +236,8 @@ def init_deal(n, m=5):
         else:
             max_activity_id = max_activity_id[0]
         activity_id = max_activity_id + 1
-        activity_name = fake.name()
+        # activity_name = fake.name()
+        activity_name = generate_activity_name()
         for plan_id in range(random.randrange(1,m+1,1)):
             start_time = fake.date_time_between(start_date='-5y', end_date='now')
             end_time = start_time + timedelta(days=random.randrange(1, 30, 1))
@@ -387,5 +388,5 @@ def init_all():
     init_deal(10, 5)
     init_recharge(100)
     init_consume(100)
-    return '正在初始化数据'
+    return '初始化数据成功'
     
