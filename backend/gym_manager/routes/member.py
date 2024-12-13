@@ -15,8 +15,6 @@ import uuid
 from datetime import datetime
 
 # [测试中] 手动注册会员
-
-
 @staff_bp.route('/add/member', methods=['POST', 'OPTIONS'])
 # @login_required
 # @permission(1)
@@ -24,15 +22,15 @@ def staff_regist_member():
     if request.method == 'OPTIONS':
         return jsonify({'msg': 'CORS preflight response'}), 200
     md = hashlib.md5()
-    md.update(request.args.get('phone_number').encode('utf-8'))
+    md.update(request.json.get('phone_number').encode('utf-8'))
 
     member = Member()
-    member.phone_number = request.args.get('phone_number')
-    member.nickname = request.args.get('nickname')
-    member.realname = request.args.get('realname')
-    member.id_card = request.args.get('id_card')
-    member.student_card = request.args.get('student_card')
-    member.gender = request.args.get('gender')
+    member.phone_number = request.json.get('phone_number')
+    member.nickname = request.json.get('nickname')
+    member.realname = request.json.get('realname')
+    member.id_card = request.json.get('id_card')
+    member.student_card = request.json.get('student_card')
+    member.gender = request.json.get('gender')
     member.password = md.hexdigest()
 
     if db.session.query(Member).filter_by(phone_number=member.phone_number).first() is not None:
@@ -71,14 +69,13 @@ def staff_get_members():
     if request.method == 'OPTIONS':
         return jsonify({'msg': 'CORS preflight response'}), 200
 
-    # print(request.args)
-    print(request.json)
     # 获取查询参数
-    page = request.args.get('page', default=1, type=int)
-    per_page = request.args.get('per_page', default=10, type=int)
+    page = request.json.get('page', 1)
+    per_page = request.json.get('per_page', 10)
     # 可选的过滤条件
-    nickname = request.args.get('nickname', default=None, type=str)
-    phone_number = request.args.get('phone_number', default=None, type=str)
+    nickname = request.json.get('nickname', None)
+    phone_number = request.json.get('phone_number', None)
+    print(request.json.get('nickname', None))
 
     # 构建查询
     query = Member.query
@@ -118,12 +115,16 @@ def staff_modify_member(id):
     member = Member.query.filter_by(member_id=id).first()
     if member is None:
         return jsonify({'msg': '用户不存在', 'code': 2002})
-
+    
+    member.phone_number = request.json.get('phone_number')
     member.nickname = request.json.get('nickname')
     member.realname = request.json.get('realname')
     member.id_card = request.json.get('id_card')
     member.student_card = request.json.get('student_card')
-    member.phone_number = request.json.get('phone_number')
+    member.email = request.json.get('email')
+    
+    member.campus = request.json.get('campus')
+    member.address = request.json.get('address')
     # print(member.to_json())
     # 提交更改到数据库
     try:
