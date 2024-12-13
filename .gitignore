@@ -2,6 +2,8 @@ test/
 __pycache__/
 .vscode/
 frontend/node_modules/
+frontend/public/
+# frontend/src
 
 # 无用的文件
 doc/临时用.md
