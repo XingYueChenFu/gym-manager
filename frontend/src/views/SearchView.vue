@@ -170,15 +170,6 @@
                 </thead>
                 <tbody>
                   <!-- 批量生成列表 -->
-				   <tr>
-                    <!-- <router-link to="/member/detail" class="nav-link"> -->
-                      <td> 1</td>
-                      <td> 2 </td>
-                      <td> 3 </td>
-                      <td> 4 </td>
-                      <!-- <td><label class="badge badge-warning">{{ item.state }}</label></td> 状态信息 -->
-                    <!-- </router-link> -->
-                  </tr>
                   <tr v-for="(item, index) in items" :key="index"  @click="goToMemberDetail(item.member_id)">
                       <td> {{ item.member_id }} </td>
                       <td> {{ item.nickname }} </td>
