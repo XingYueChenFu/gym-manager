@@ -22,15 +22,15 @@ def staff_regist_member():
     if request.method == 'OPTIONS':  
         return jsonify({'msg': 'CORS preflight response'}), 200
     md = hashlib.md5()
-    md.update(request.json.get('phone_number').encode('utf-8'))
+    md.update(request.args.get('phone_number').encode('utf-8'))
     
     member = Member()
-    member.phone_number = request.json.get('phone_number')
-    member.nickname = request.json.get('nickname')
-    member.realname = request.json.get('realname')
-    member.id_card = request.json.get('id_card')
-    member.student_card = request.json.get('student_card')
-    member.gender = request.json.get('gender')
+    member.phone_number = request.args.get('phone_number')
+    member.nickname = request.args.get('nickname')
+    member.realname = request.args.get('realname')
+    member.id_card = request.args.get('id_card')
+    member.student_card = request.args.get('student_card')
+    member.gender = request.args.get('gender')
     member.password = md.hexdigest()
     
     if db.session.query(Member).filter_by(phone_number=member.phone_number).first() is not None:
@@ -107,10 +107,10 @@ def staff_modify_member(id):
     if member is None:
         return jsonify({'msg': '用户不存在', 'code': 2002})
     
-    member.nickname = request.json.get('nickname')
-    member.realname = request.json.get('realname')
-    member.id_card = request.json.get('id_card')
-    member.student_card = request.json.get('student_card')
+    member.nickname = request.args.get('nickname')
+    member.realname = request.args.get('realname')
+    member.id_card = request.args.get('id_card')
+    member.student_card = request.args.get('student_card')
     
     # 提交更改到数据库  
     try:  
