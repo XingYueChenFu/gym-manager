@@ -69,7 +69,7 @@ def staff_get_members():
     nickname = request.args.get('nickname', default=None, type=str)
     phone_number = request.args.get('phone_number', default=None, type=str)
     
-    # 构建查询  
+    # 构建查询
     query = Member.query
     
     if nickname:
