@@ -15,7 +15,7 @@ from datetime import datetime
 
 # [开发中] 充值
 @staff_bp.route('/recharge', methods=['POST', 'OPTIONS'])
-@login_required
+# @login_required
 # @permission(1)
 def staff_recharge():
     member_id = request.json.get('member_id')

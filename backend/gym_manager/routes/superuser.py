@@ -96,7 +96,7 @@ def superuser_login_post():
     return jsonify({'msg': error, 'code': 5003})
 
 @super_bp.route('/logout', methods=['POST', 'OPTIONS'])
-@login_required
+# @login_required
 def superuser_logout():
     print('\033[1;34m[debug]\033[0m superuser_logout')
     logout_user()

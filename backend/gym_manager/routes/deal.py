@@ -16,7 +16,7 @@ from datetime import datetime
    
 # [开发中] 添加活动
 @staff_bp.route('/add/deal', methods=['POST']) # /staff/add/deal
-@login_required
+# @login_required
 # @permission(2)
 def staff_add_deal():
     # 接收一个列表，包含同一activity_id的多个plan_id
@@ -48,7 +48,7 @@ def staff_add_deal():
 
 # [开发中] 删除活动 <id>
 @staff_bp.route('/delete/deal/<int:id>', methods=['POST']) # /staff/delete/deal/<id>
-@login_required
+# @login_required
 # @permission(2)
 def staff_delete_deal_by_id(id):
     deals = Deal.query.filter_by(activity_id=id).all()
@@ -65,7 +65,7 @@ def staff_delete_deal_by_id(id):
     
 # [开发中] 删除活动
 @staff_bp.route('/delete/deal', methods=['POST']) # /staff/delete/deal
-@login_required
+# @login_required
 # @permission(2)
 def staff_delete_deal():
     data = request.json.get('data')
@@ -75,7 +75,7 @@ def staff_delete_deal():
 
 # [开发中] 修改活动
 @staff_bp.route('/modify/deal', methods=['POST']) # /staff/modify/deal
-@login_required
+# @login_required
 # @permission(2)
 def staff_modify_deal():
     data = request.json.get('data')
@@ -103,7 +103,7 @@ def staff_modify_deal():
 
 # [开发中] 查询活动详情 <id>
 @staff_bp.route('/query/deal/<int:id>', methods=['POST']) # /staff/query/deal/<id>
-# @login_required
+# # @login_required
 def staff_get_deal_by_id(id):
     # 同一activity_id的多个plan_id
     deals = Deal.query.filter_by(activity_id=id).all()
@@ -116,7 +116,7 @@ def staff_get_deal_by_id(id):
 
 # [开发中] 查询活动详情
 @staff_bp.route('/query/deal', methods=['POST']) # /staff/query/deal
-# @login_required
+# # @login_required
 def staff_get_deal():
     data = request.json.get('data')
     output_data = []
@@ -127,7 +127,7 @@ def staff_get_deal():
 
 # [开发中] 查询现在有的活动 start_time~end_time
 @staff_bp.route('/query/deal/now', methods=['POST']) # /staff/query/deal/now
-# @login_required
+# # @login_required
 def staff_get_deal_now():
     now = datetime.now()
     deals = Deal.query.filter(Deal.start_time <= now, Deal.end_time >= now).all()

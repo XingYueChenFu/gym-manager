@@ -39,14 +39,14 @@ def do_login():
 
 # [测试中] 退出登录
 @staff_bp.route('/logout', methods=['POST', 'OPTIONS'])    
-@login_required
+# @login_required
 def do_logout():
     logout_user()
     return jsonify({'msg': '成功', 'code': 200}) # 前端：退出登录成功
 
 # [测试中] 注册员工 # 管理员
 @staff_bp.route('/register', methods=['POST', 'OPTIONS'])
-@login_required
+# @login_required
 # @permission(3) # 管理员
 def do_register():
     # md5加密 密码

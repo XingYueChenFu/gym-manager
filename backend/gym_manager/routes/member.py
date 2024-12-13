@@ -16,9 +16,11 @@ from datetime import datetime
 
 # [测试中] 手动注册会员
 @staff_bp.route('/add/member', methods=['POST', 'OPTIONS'])
-@login_required
+# @login_required
 # @permission(1)
 def staff_regist_member():
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
     md = hashlib.md5()
     md.update(request.json.get('phone_number').encode('utf-8'))
     
@@ -44,7 +46,7 @@ def staff_regist_member():
 # [测试中] 查询会员详情 <id>
 # @staff_bp.route('/staff/member/<int:id>', methods=['GET'])
 @staff_bp.route('/query/member/<int:id>', methods=['POST', 'OPTIONS'])
-@login_required
+# @login_required
 # @permission(1)
 def staff_get_member_by_id(id):
     member = Member.query.filter_by(member_id=id).first()
@@ -94,9 +96,11 @@ def staff_get_members():
     
 # [测试中] 修改会员信息 <id> # 管理员
 @staff_bp.route('/modify/member/<int:id>', methods=['POST', 'OPTIONS'])
-@login_required
+# @login_required
 # @permission(1)
 def staff_modify_member(id):
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
     member = Member.query.filter_by(member_id=id).first()
     if member is None:
         return jsonify({'msg': '用户不存在', 'code': 2002})
@@ -116,9 +120,11 @@ def staff_modify_member(id):
 
 # [测试中] 删除会员 <id> # 管理员
 @staff_bp.route('/delete/member/<int:id>', methods=['POST', 'OPTIONS'])
-@login_required
+# @login_required
 # @permission(3) # 管理员
 def staff_delete_member(id):
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
     member = Member.query.filter_by(member_id=id).first()
     if member is None:
         return jsonify({'msg': '用户不存在', 'code': 2002})
