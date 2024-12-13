@@ -21,7 +21,7 @@ from datetime import datetime
 # @login_required
 # @permission(1)
 def staff_regist_member():
-    if request.method == 'OPTIONS':  
+    if request.method == 'OPTIONS':
         return jsonify({'msg': 'CORS preflight response'}), 200
     md = hashlib.md5()
     md.update(request.json.get('phone_number').encode('utf-8'))
@@ -52,7 +52,7 @@ def staff_regist_member():
 # @login_required
 # @permission(1)
 def staff_get_member_by_id(id):
-    if request.method == 'OPTIONS':  
+    if request.method == 'OPTIONS':
         return jsonify({'msg': 'CORS preflight response'}), 200
     member = Member.query.filter_by(member_id=id).first()
     if member is None:
@@ -102,7 +102,7 @@ def staff_get_members():
             'items': [item.to_json() for item in items.items],
         }
     }
-    return jsonify(result)
+    return jsonify(result), 200
 
 # [测试中] 修改会员信息 <id> # 管理员
 
@@ -111,8 +111,9 @@ def staff_get_members():
 # @login_required
 # @permission(1)
 def staff_modify_member(id):
-    if request.method == 'OPTIONS':  
+    if request.method == 'OPTIONS':
         return jsonify({'msg': 'CORS preflight response'}), 200
+
     member = Member.query.filter_by(member_id=id).first()
     if member is None:
         return jsonify({'msg': '用户不存在', 'code': 2002})
@@ -121,7 +122,8 @@ def staff_modify_member(id):
     member.realname = request.json.get('realname')
     member.id_card = request.json.get('id_card')
     member.student_card = request.json.get('student_card')
-
+    member.phone_number = request.json.get('phone_number')
+    # print(member.to_json())
     # 提交更改到数据库
     try:
         db.session.commit()  # 提交更改
@@ -139,7 +141,7 @@ def staff_modify_member(id):
 # @login_required
 # @permission(3) # 管理员
 def staff_delete_member(id):
-    if request.method == 'OPTIONS':  
+    if request.method == 'OPTIONS':
         return jsonify({'msg': 'CORS preflight response'}), 200
     member = Member.query.filter_by(member_id=id).first()
     if member is None:

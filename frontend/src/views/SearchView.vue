@@ -260,11 +260,14 @@ const handleEnter = async () => {
           'Content-Type': 'application/json',
         },
       }
-    );
-    console.log('查询成功……');
-    // 更新响应信息
-    items.value = response.data; // 将返回数据赋值给 items
-    console.log('查询结果更新！');
+	  );
+	  if (response.data.code === 200) {
+		  console.log('查询成功……');
+		  // 更新响应信息
+		  items.value = response.data.data.items; // 将返回数据赋值给 items
+		  console.log('查询结果:', response.data);
+		  console.log('查询结果更新！');
+	  }
   } catch (error) {
     console.error('请求失败:', error);
   }

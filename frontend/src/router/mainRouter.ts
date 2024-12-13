@@ -4,7 +4,7 @@ import SearchView from '../views/SearchView.vue'
 // import MemberView from '../views/MemberAddView.vue'
 import MemberAddView from '../views/MemberAddView.vue'
 import MemberDetailView from '../views/MemberDetailView.vue'
-import RechargeView from '../views/RechargeView.vue'
+import RechargeView from '../views/RechageView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [

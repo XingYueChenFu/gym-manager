@@ -131,15 +131,14 @@
   <!-- partial -->
   <div class="main-panel">
     <div class="content-wrapper">
-      <div class="card">
-        <div class="card-body">
-          <div class="row">
-              <h4 class="col-4 card-title">Member Information</h4>
+      <div class="col-12 grid-margin">
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <h4 class="col-4 card-title">Add new member</h4>
               <div class="col-8">
                 <div class="justify-content-end d-flex">
-                  <button class="btn btn-light mb-2" @click="handleCancel">Cancel</button>
-                  <span style="width: 4px;"></span>
-                  <button type="button" class="btn btn-primary mb-2" @click="handleSave">Save</button>
+                  <button type="button" class="btn btn-primary mb-2" @click="handleSubmit">Submit</button>
                 </div>
               </div>
             </div>
@@ -151,7 +150,7 @@
                   <div class="form-group row">
                     <label class="col-sm-3 col-form-label">Name</label>
                     <div class="col-sm-9">
-                      <input type="text" class="form-control" v-model="formData.realname" @input="handleInputChange" />
+                      <input type="text" class="form-control" v-model="formData.realname" />
                     </div>
                   </div>
                 </div>
@@ -168,9 +167,9 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group row">
-                    <label class="col-sm-3 col-form-label"> Student Card</label>
+                    <label class="col-sm-3 col-form-label">Student Card</label>
                     <div class="col-sm-9">
-                      <div class="form-control" style="border: none !important;">{{ formData.student_card }}</div>
+                      <input type="text" class="form-control" v-model="formData.student_card" />
                     </div>
                   </div>
                 </div>
@@ -189,7 +188,10 @@
                   <div class="form-group row">
                     <label class="col-sm-3 col-form-label">Gender</label>
                     <div class="col-sm-9">
-                      <div class="form-control" style="border: none !important;">{{ formData.gender }}</div>
+                      <select class="form-select form-select-lg" v-model="formData.gender">
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -197,7 +199,10 @@
                   <div class="form-group row">
                     <label class="col-sm-3 col-form-label">Membership</label>
                     <div class="col-sm-9">
-                      <div class="form-control" style="border: none !important;">{{ formData.membership }}</div>
+                      <select class="form-select form-select-lg" v-model="formData.membership">
+                        <option value="member">Member</option>
+                        <option value="administrator">Administrator</option>
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -229,7 +234,9 @@
                   </div>
                 </div>
               </div>
+
             </form>
+          </div>
         </div>
       </div>
     </div>
@@ -237,115 +244,56 @@
 
 </template>
 
-<script lang='ts' setup>
+<script lang="ts" setup>
 import { ref } from 'vue';
-import axios from "axios";
+import axios from 'axios';
 import { useRouter } from 'vue-router';
 import { useMemberStore } from '../stores/member';
-
 // 获取 router 实例
 const router = useRouter();
-const memberStore = useMemberStore();
-const memberId = memberStore.$state.memberInfo.member_id;
-console.log(memberStore.$state.memberInfo.member_id);  // 要展示的 member_id
-// 表单数据
+// 响应式表单数据
 const formData = ref({
-  realname: "Zhang San",
-  nickname: "fake name",
-  student_card: "007",
-  phone_number: "10086",
-  gender: "male",
-  membership: "member",
-  campus: "江安",
-  address: "江安西园XX舍XX单元XX室",
+  realname: '',
+  nickname: '',
+  student_card: '',
+  phone_number: '',
+  gender: 'Male',
+  membership: 'member',
+  address: '',
+  campus: '江安',
 });
 
-const formDataCopy = ref({
-  realname: "Zhang San",
-  nickname: "fake name",
-  student_card: "007",
-  phone_number: "10086",
-  gender: "male",
-  membership: "member",
-  campus: "江安",
-  address: "江安西园XX舍XX单元XX室",
-});
-
-// 初始化标志位，表示表单是否被修改
-let isFormModified = ref(false);
-
-// 获取用户信息的函数
-const fetchMemberInfo = async () => {
-  isFormModified = ref(false);
+// 提交按钮的处理逻辑
+const handleSubmit = async () => {
   try {
-    if (memberId === '') {
-      console.log("memberId is empty");
-      alert("请先搜索！");
-      router.push('/search');
-      return;
-    }
-
-    // 发送请求
+    const payload = { ...formData.value }; // 提交前的表单数据
+    console.log('Sending data:', payload);
+    // router.push('/member/detail');
+    // 发送 POST 请求
     const response = await axios.post(
-      `http://localhost:5000/staff/query/member/${memberId}`,
+      'http://localhost:5000/staff/add/member',
+      payload,
       {
         headers: {
           'Content-Type': 'application/json',
         },
-      });
-    // 响应处理
-    console.log(response.data.data);
+      }
+    );
+    // 请求成功后的处理逻辑
     if (response.data.code === 200) {
-      if (response.data.data.gender === 'F') response.data.data.gender = 'female';
-      else response.data.data.gender = 'male';
-      Object.assign(formData.value, response.data.data);
-      Object.assign(formDataCopy.value, response.data.data);
-      console.log("用户信息已填充！");
-    } else {
-      alert("不存在该会员！");
+      console.log('Response:', response.data);
+      alert('Member added successfully!');
+      const memberStore = useMemberStore();
+      memberStore.setMemberInfo(response.data.member_id); // 保存 member_id，便于member detail页面的获取信息
+      router.push('/member/detail');
     }
-  } catch (error) {
-    console.error("获取用户信息失败:", error);
-    alert("获取用户信息失败，请稍后再试！");
-  }
-};
-fetchMemberInfo();
-
-// 监听输入框的变化，检测用户是否修改了表单
-const handleInputChange = () => {
-  isFormModified.value = true;
-};
-
-// 拒绝：回溯表单时重置标志位
-const handleCancel = () => {
-  console.log('Form Cancel:', formData.value);
-  isFormModified.value = false;  // 提交后重置为未修改状态
-  Object.assign(formData.value, formDataCopy.value);
-};
-
-// 保存：提交表单时重置标志位
-const handleSave = async () => {
-  console.log('Form submitted:', formData.value);
-  try {
-    const response = await axios.post(
-      `http://localhost:5000/staff/modify/member/${memberId}`,
-        formData.value,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-      });
-    if (response.data.code === 200) {
-      alert("修改成功！");
-      isFormModified.value = false;  // 提交后重置为未修改状态
-      Object.assign(formDataCopy.value, formData.value);
-    } else {
-      alert("修改失败！");
+    else {
+      alert('Failed to add member.');
     }
   } catch (error) {
     // 请求失败的处理逻辑
-    console.error('Error while saving:', error);
-    alert('Failed to Save.');
+    console.error('Error while adding member:', error);
+    alert('Failed to add member.');
   }
 };
 </script>
