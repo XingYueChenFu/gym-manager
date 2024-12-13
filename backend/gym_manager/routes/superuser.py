@@ -26,7 +26,7 @@ def superuser_register_get():
     return render_template('superuser/register.html')
 
 # [测试中] 暂留，之后删    
-@super_bp.route('/register', methods=['POST'])
+@super_bp.route('/register', methods=['POST', 'OPTIONS'])
 def superuser_register_post():
     print('\033[1;34m[debug]\033[0m superuser_register_post')
     username = request.form.get('username')
@@ -70,7 +70,7 @@ def superuser_login_get():
     return render_template('superuser/login.html')
 
 # [测试中] 暂留，之后删
-@super_bp.route('/login', methods=['POST'])
+@super_bp.route('/login', methods=['POST', 'OPTIONS'])
 def superuser_login_post():
     print('\033[1;34m[debug]\033[0m superuser_login_post')
     username = request.form.get('username')
@@ -95,7 +95,7 @@ def superuser_login_post():
     print('\033[1;31m[ERROR]\033[0m {}'.format(error))
     return jsonify({'msg': error, 'code': 5003})
 
-@super_bp.route('/logout', methods=['POST'])
+@super_bp.route('/logout', methods=['POST', 'OPTIONS'])
 @login_required
 def superuser_logout():
     print('\033[1;34m[debug]\033[0m superuser_logout')
@@ -114,7 +114,7 @@ def add_member_get():
     print('\033[1;34m[debug]\033[0m add_member get')
     return render_template('superuser/add_member.html')
 
-@super_bp.route('/add_member', methods=['POST'])
+@super_bp.route('/add_member', methods=['POST', 'OPTIONS'])
 def add_member_post():
     print('\033[1;34m[debug]\033[0m add_member_post')
     phone = request.form.get('phone_number')
@@ -276,7 +276,9 @@ def recharge(member_id, activity_id, plan_id, recharge_time=datetime.now()):
     
     # 2.记录充值记录
     recharge_time = recharge_time
-    recharge_remark = fake.text()
+    # recharge_remark = fake.text()
+    # 最长255个字符
+    recharge_remark = fake.text(max_nb_chars=255)
     recharge_record = RechargeRecord(member_id=member_id, activity_id=activity_id, plan_id=plan_id, recharge_time=recharge_time, recharge_remark=recharge_remark)
     db.session.add(recharge_record)
     db.session.commit()
@@ -387,6 +389,6 @@ def init_all():
     init_member(10)
     init_deal(10, 5)
     init_recharge(100)
-    init_consume(100)
+    init_consume(50)
     return '初始化数据成功'
     

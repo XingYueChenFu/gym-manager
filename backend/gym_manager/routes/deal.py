@@ -15,7 +15,7 @@ import uuid
 from datetime import datetime
    
 # [开发中] 添加活动
-@staff_bp.route('/staff/add/deal', methods=['POST']) # /staff/add/deal
+@staff_bp.route('/add/deal', methods=['POST']) # /staff/add/deal
 @login_required
 @permission(2)
 def staff_add_deal():

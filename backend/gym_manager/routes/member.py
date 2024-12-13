@@ -15,7 +15,7 @@ import uuid
 from datetime import datetime
 
 # [测试中] 手动注册会员
-@staff_bp.route('/add/member', methods=['POST'])
+@staff_bp.route('/add/member', methods=['POST', 'OPTIONS'])
 @login_required
 @permission(1)
 def staff_regist_member():
@@ -43,7 +43,7 @@ def staff_regist_member():
 
 # [测试中] 查询会员详情 <id>
 # @staff_bp.route('/staff/member/<int:id>', methods=['GET'])
-@staff_bp.route('/query/member/<int:id>', methods=['POST'])
+@staff_bp.route('/query/member/<int:id>', methods=['POST', 'OPTIONS'])
 @login_required
 @permission(1)
 def staff_get_member_by_id(id):
@@ -53,8 +53,8 @@ def staff_get_member_by_id(id):
     return jsonify({'msg': '成功', 'code': 200, 'data': member.to_json()}) # 前端：查询成功
 
 # [测试中] 条件查询会员列表 
-@staff_bp.route('/query/members', methods=['POST'])  
-@login_required  
+@staff_bp.route('/query/members', methods=['POST', 'OPTIONS'])
+@login_required
 @permission(1)  
 def staff_get_members():  
     # 获取查询参数  
@@ -71,18 +71,24 @@ def staff_get_members():
         query = query.filter(Member.nickname.like(f'%{nickname}%')) # like:区分大小写 ilike:不区分大小写
     if phone_number:
         query = query.filter(Member.phone_number == phone_number)
-        
+    # 总页数 query数 除以 每页数
+    total = (query.count() - 1) // per_page + 1
     items = query.paginate(page=page, per_page=per_page) # 分页查询 (查询结果为空的话items.items将返回空列表)
     
     result = {
         'msg': '成功',
         'code': 200,
-        'data': [item.to_json() for item in items.items]
+        'data': {
+            'total': total,
+            'page': page,
+            'per_page': per_page,
+            'items': [item.to_json() for item in items.items],
+        }
     }
     return jsonify(result)
     
 # [测试中] 修改会员信息 <id> # 管理员
-@staff_bp.route('/modify/member/<int:id>', methods=['POST'])
+@staff_bp.route('/modify/member/<int:id>', methods=['POST', 'OPTIONS'])
 @login_required
 @permission(1)
 def staff_modify_member(id):
@@ -104,7 +110,7 @@ def staff_modify_member(id):
         return jsonify({'msg': '数据修改失败', 'code': 5003, 'error': str(e)}), 500  # 返回错误消息和状态码 500
 
 # [测试中] 删除会员 <id> # 管理员
-@staff_bp.route('/delete/member/<int:id>', methods=['POST'])
+@staff_bp.route('/delete/member/<int:id>', methods=['POST', 'OPTIONS'])
 @login_required
 @permission(3) # 管理员
 def staff_delete_member(id):

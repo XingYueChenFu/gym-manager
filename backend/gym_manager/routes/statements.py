@@ -15,7 +15,7 @@ import uuid
 from datetime import datetime
 
 # [开发中] 查看客流量
-@staff_bp.route('/statements/consume', methods=['POST']) # /staff/statements/consume
+@staff_bp.route('/statements/consume', methods=['POST', 'OPTIONS']) # /staff/statements/consume
 @login_required
 @permission(2)
 def staff_statements_consume_get():
@@ -42,7 +42,7 @@ def staff_statements_consume_get():
     return jsonify(return_data)
     
 # [开发中] 查看充值记录
-@staff_bp.route('/statements/recharge', methods=['POST']) # /staff/statements/recharge
+@staff_bp.route('/statements/recharge', methods=['POST', 'OPTIONS']) # /staff/statements/recharge
 @login_required
 @permission(2)
 def staff_statements_recharge_get():

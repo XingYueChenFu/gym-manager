@@ -19,7 +19,7 @@ from datetime import datetime
 # def do_login_get():
 #     return render_template('staff/login.html'), 200
 # [测试中] 登录 # /staff/login
-@staff_bp.route('/login', methods=['POST'])
+@staff_bp.route('/login', methods=['POST', 'OPTIONS'])
 def do_login():
     # staff = Staff.query.filter(Staff.username == request.json.get('username')).first()
     staff = Staff.query.filter_by(username=request.json.get('username')).first()
@@ -33,14 +33,14 @@ def do_login():
     return jsonify({'msg': '登录失败，账号或密码错误', 'code': 2003})
 
 # [测试中] 退出登录
-@staff_bp.route('/logout', methods=['POST'])    
+@staff_bp.route('/logout', methods=['POST', 'OPTIONS'])    
 @login_required
 def do_logout():
     logout_user()
     return jsonify({'msg': '成功', 'code': 200}) # 前端：退出登录成功
 
 # [测试中] 注册员工 # 管理员
-@staff_bp.route('/staff/register', methods=['POST'])
+@staff_bp.route('/register', methods=['POST', 'OPTIONS'])
 @login_required
 @permission(3) # 管理员
 def do_register():

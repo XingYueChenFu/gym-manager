@@ -66,7 +66,7 @@ def create_app(used_config):
     db.init_app(app)
     
     # ===== 以下👇代码用于测试数据库连接 =====
-    from gym_manager.models import Member, Deal, RechargeRecord, ConsumeRecord, UsageCount, ExpirationTime, Staff
+    from gym_manager.models import Member, Deal, DealPicture, RechargeRecord, ConsumeRecord, UsageCount, ExpirationTime, Staff
     with app.app_context():
         # 确认数据库连接  
         try:  
@@ -78,9 +78,12 @@ def create_app(used_config):
         if used_config.RESET_DATABASE:
             # 重置数据库
             db.drop_all()
+            
             print("\033[1;35m[DEBUG]\033[0m Tables to be created:", db.Model.metadata.tables.keys())  
             db.create_all()
+            
             print('\033[1;33m[ATTENTION]\033[0m Database reseted.')
+            
             from sqlalchemy import inspect  
             inspector = inspect(db.engine)  
             print("\033[1;35m[DEBUG]\033[0m Existing tables in the database:", inspector.get_table_names())
