@@ -21,6 +21,8 @@ from datetime import datetime
 # @login_required
 # @permission(1)
 def staff_regist_member():
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
     md = hashlib.md5()
     md.update(request.json.get('phone_number').encode('utf-8'))
     member = Member()
@@ -50,6 +52,8 @@ def staff_regist_member():
 # @login_required
 # @permission(1)
 def staff_get_member_by_id(id):
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
     member = Member.query.filter_by(member_id=id).first()
     if member is None:
         return jsonify({'msg': '用户不存在', 'code': 2002})
@@ -107,6 +111,8 @@ def staff_get_members():
 # @login_required
 # @permission(1)
 def staff_modify_member(id):
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
     member = Member.query.filter_by(member_id=id).first()
     if member is None:
         return jsonify({'msg': '用户不存在', 'code': 2002})
@@ -133,6 +139,8 @@ def staff_modify_member(id):
 # @login_required
 # @permission(3) # 管理员
 def staff_delete_member(id):
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
     member = Member.query.filter_by(member_id=id).first()
     if member is None:
         return jsonify({'msg': '用户不存在', 'code': 2002})
