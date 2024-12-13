@@ -9,12 +9,14 @@ from flask_login import login_user, logout_user, login_required, \
 import flask_excel as excel
 
 from sqlalchemy import asc, true, desc, text
-    
+
 import hashlib
 import uuid
 from datetime import datetime
 
 # [测试中] 手动注册会员
+
+
 @staff_bp.route('/add/member', methods=['POST', 'OPTIONS'])
 # @login_required
 # @permission(1)
@@ -32,7 +34,7 @@ def staff_regist_member():
     member.student_card = request.args.get('student_card')
     member.gender = request.args.get('gender')
     member.password = md.hexdigest()
-    
+
     if db.session.query(Member).filter_by(phone_number=member.phone_number).first() is not None:
         return jsonify({'msg': '手机号码已存在', 'code': 2114})
     try:
@@ -41,10 +43,12 @@ def staff_regist_member():
     except Exception as e:
         db.rollback()
         return jsonify({'msg': '数据添加失败', 'code': 5001})
-    return jsonify({'msg': '成功', 'code': 200}) # 前端：注册成功
+    return jsonify({'msg': '成功', 'code': 200})  # 前端：注册成功
 
 # [测试中] 查询会员详情 <id>
 # @staff_bp.route('/staff/member/<int:id>', methods=['GET'])
+
+
 @staff_bp.route('/query/member/<int:id>', methods=['POST', 'OPTIONS'])
 # @login_required
 # @permission(1)
@@ -54,36 +58,41 @@ def staff_get_member_by_id(id):
     member = Member.query.filter_by(member_id=id).first()
     if member is None:
         return jsonify({'msg': '用户不存在', 'code': 2002})
-    return jsonify({'msg': '成功', 'code': 200, 'data': member.to_json()}) # 前端：查询成功
+    # 前端：查询成功
+    return jsonify({'msg': '成功', 'code': 200, 'data': member.to_json()})
 
-# [测试中] 条件查询会员列表 
+# [测试中] 条件查询会员列表
+
+
 @staff_bp.route('/query/members', methods=['POST', 'OPTIONS'])
 # @login_required
-# @permission(1)  
+# @permission(1)
 def staff_get_members():
-    if request.method == 'OPTIONS':  
+    if request.method == 'OPTIONS':
         return jsonify({'msg': 'CORS preflight response'}), 200
-    
+
     # print(request.args)
     print(request.json)
     # 获取查询参数
-    page = request.args.get('page', default=1, type=int)  
+    page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
     # 可选的过滤条件
     nickname = request.args.get('nickname', default=None, type=str)
     phone_number = request.args.get('phone_number', default=None, type=str)
-    
+
     # 构建查询
     query = Member.query
-    
+
     if nickname:
-        query = query.filter(Member.nickname.like(f'%{nickname}%')) # like:区分大小写 ilike:不区分大小写
+        query = query.filter(Member.nickname.like(
+            f'%{nickname}%'))  # like:区分大小写 ilike:不区分大小写
     if phone_number:
         query = query.filter(Member.phone_number == phone_number)
     # 总页数 query数 除以 每页数
     total = (query.count() - 1) // per_page + 1
-    items = query.paginate(page=page, per_page=per_page) # 分页查询 (查询结果为空的话items.items将返回空列表)
-    
+    # 分页查询 (查询结果为空的话items.items将返回空列表)
+    items = query.paginate(page=page, per_page=per_page)
+
     result = {
         'msg': '成功',
         'code': 200,
@@ -95,8 +104,10 @@ def staff_get_members():
         }
     }
     return jsonify(result)
-    
+
 # [测试中] 修改会员信息 <id> # 管理员
+
+
 @staff_bp.route('/modify/member/<int:id>', methods=['POST', 'OPTIONS'])
 # @login_required
 # @permission(1)
@@ -121,6 +132,8 @@ def staff_modify_member(id):
         return jsonify({'msg': '数据修改失败', 'code': 5003, 'error': str(e)}), 500  # 返回错误消息和状态码 500
 
 # [测试中] 删除会员 <id> # 管理员
+
+
 @staff_bp.route('/delete/member/<int:id>', methods=['POST', 'OPTIONS'])
 # @login_required
 # @permission(3) # 管理员
@@ -130,12 +143,11 @@ def staff_delete_member(id):
     member = Member.query.filter_by(member_id=id).first()
     if member is None:
         return jsonify({'msg': '用户不存在', 'code': 2002})
-    
+
     try:
         db.session.delete(member)
         db.session.commit()
     except Exception as e:
         db.session.rollback()
         return jsonify({'msg': '数据删除失败', 'code': 5002})
-    return jsonify({'msg': '成功', 'code': 200}) # 前端：删除成功
-
+    return jsonify({'msg': '成功', 'code': 200})  # 前端：删除成功
