@@ -1,15 +1,16 @@
-test/
 __pycache__/
 .vscode/
-frontend/node_modules/
 
-frontend/public/assets/
-frontend/public/assets_skydash/
-frontend/public/bootstrap-4.6.2-dist/
-frontend/public/fontawesome-free-6.7.1-web/
+frontend/node_modules/
+frontend/public/
+
+# frontend/public/assets/
+# frontend/public/assets_skydash/
+# frontend/public/bootstrap-4.6.2-dist/
+# frontend/public/fontawesome-free-6.7.1-web/
 
 # 无用的文件
-doc/临时用.md
+test/
 backend.zip
 
 # 含 ‘备份’ 的文件和目录
