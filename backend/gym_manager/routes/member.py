@@ -49,6 +49,8 @@ def staff_regist_member():
 # @login_required
 # @permission(1)
 def staff_get_member_by_id(id):
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
     member = Member.query.filter_by(member_id=id).first()
     if member is None:
         return jsonify({'msg': '用户不存在', 'code': 2002})

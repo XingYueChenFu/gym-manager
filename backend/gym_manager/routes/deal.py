@@ -19,6 +19,8 @@ from datetime import datetime
 # @login_required
 # @permission(2)
 def staff_add_deal():
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
     # 接收一个列表，包含同一activity_id的多个plan_id
     data = request.json.get('data')
     for item in data:
@@ -51,6 +53,8 @@ def staff_add_deal():
 # @login_required
 # @permission(2)
 def staff_delete_deal_by_id(id):
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
     deals = Deal.query.filter_by(activity_id=id).all()
     if deals is None:
         return jsonify({'msg': '数据不存在', 'code': 5005})
@@ -68,6 +72,8 @@ def staff_delete_deal_by_id(id):
 # @login_required
 # @permission(2)
 def staff_delete_deal():
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
     data = request.json.get('data')
     for item in data:
         deal = Deal.query.filter_by(activity_id=item.get('activity_id'), plan_id=item.get('plan_id')).first()
@@ -78,6 +84,8 @@ def staff_delete_deal():
 # @login_required
 # @permission(2)
 def staff_modify_deal():
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
     data = request.json.get('data')
     for item in data:
         deal = Deal.query.filter_by(activity_id=item.get('activity_id'), plan_id=item.get('plan_id')).first()
@@ -105,6 +113,8 @@ def staff_modify_deal():
 @staff_bp.route('/query/deal/<int:id>', methods=['POST']) # /staff/query/deal/<id>
 # # @login_required
 def staff_get_deal_by_id(id):
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
     # 同一activity_id的多个plan_id
     deals = Deal.query.filter_by(activity_id=id).all()
     if deals is None:
@@ -118,6 +128,8 @@ def staff_get_deal_by_id(id):
 @staff_bp.route('/query/deal', methods=['POST']) # /staff/query/deal
 # # @login_required
 def staff_get_deal():
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
     data = request.json.get('data')
     output_data = []
     for item in data:
@@ -129,6 +141,8 @@ def staff_get_deal():
 @staff_bp.route('/query/deal/now', methods=['POST']) # /staff/query/deal/now
 # # @login_required
 def staff_get_deal_now():
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
     now = datetime.now()
     deals = Deal.query.filter(Deal.start_time <= now, Deal.end_time >= now).all()
     if deals is None:

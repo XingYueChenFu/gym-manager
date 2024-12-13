@@ -13,11 +13,13 @@ import hashlib
 import uuid
 from datetime import datetime
 
-# [开发中] 充值
+# [开发中] 充值 未实现
 @staff_bp.route('/recharge', methods=['POST', 'OPTIONS'])
 # @login_required
 # @permission(1)
 def staff_recharge():
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
     member_id = request.json.get('member_id')
     activity_id = request.json.get('activity_id')
     plan_id = request.json.get('plan_id')

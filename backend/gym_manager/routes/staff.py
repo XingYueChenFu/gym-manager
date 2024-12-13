@@ -41,6 +41,8 @@ def do_login():
 @staff_bp.route('/logout', methods=['POST', 'OPTIONS'])    
 # @login_required
 def do_logout():
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
     logout_user()
     return jsonify({'msg': '成功', 'code': 200}) # 前端：退出登录成功
 
@@ -49,6 +51,8 @@ def do_logout():
 # @login_required
 # @permission(3) # 管理员
 def do_register():
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
     # md5加密 密码
     md = hashlib.md5()
     md.update(request.json.get('password').encode('utf-8'))
