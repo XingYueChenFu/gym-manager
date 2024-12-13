@@ -15,8 +15,6 @@ import uuid
 from datetime import datetime
 
 # [测试中] 手动注册会员
-
-
 @staff_bp.route('/add/member', methods=['POST', 'OPTIONS'])
 # @login_required
 # @permission(1)
@@ -117,12 +115,16 @@ def staff_modify_member(id):
     member = Member.query.filter_by(member_id=id).first()
     if member is None:
         return jsonify({'msg': '用户不存在', 'code': 2002})
-
+    
+    member.phone_number = request.json.get('phone_number')
     member.nickname = request.json.get('nickname')
     member.realname = request.json.get('realname')
     member.id_card = request.json.get('id_card')
     member.student_card = request.json.get('student_card')
-    member.phone_number = request.json.get('phone_number')
+    member.email = request.json.get('email')
+    
+    member.campus = request.json.get('campus')
+    member.address = request.json.get('address')
     # print(member.to_json())
     # 提交更改到数据库
     try:

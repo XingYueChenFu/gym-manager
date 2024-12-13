@@ -17,6 +17,8 @@ class Member(db.Model):
     email = db.Column(db.String(255)) # 可有可无
     birthdate = db.Column(db.DateTime) # 可有可无 非birthday
     password = db.Column(db.String(255)) # 可有可无
+    campus = db.Column(db.String(50)) # 可有可无
+    address = db.Column(db.String(255)) # 可有可无
     
     def get_id(self):
         return self.member_id
@@ -36,7 +38,9 @@ class Member(db.Model):
             'student_card': self.student_card,
             'gender': self.gender, 
             'email': self.email,  
-            'birthdate': self.birthdate.isoformat() if self.birthdate else None,  
+            'birthdate': self.birthdate.isoformat() if self.birthdate else None,
+            'campus': self.campus,
+            'address': self.address
         }
         
         return json

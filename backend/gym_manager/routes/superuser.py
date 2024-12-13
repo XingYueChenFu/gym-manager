@@ -213,8 +213,10 @@ def init_member(n):
         gender = random.choice(['M', 'F', 'O'])
         email = fake.email()
         birthdate = fake.date_of_birth()
+        campus = random.choice(['望江', '华西', '江安'])
+        address = fake.address()
         member = Member(phone_number=phone_number, nickname=nickname, realname=realname, id_card=id_card, \
-            student_card=student_card, gender=gender, email=email, birthdate=birthdate)
+            student_card=student_card, gender=gender, email=email, birthdate=birthdate, campus=campus, address=address)
         db.session.add(member)
     try:
         db.session.commit()
@@ -277,8 +279,9 @@ def recharge(member_id, activity_id, plan_id, recharge_time=datetime.now()):
     # 2.记录充值记录
     recharge_time = recharge_time
     # recharge_remark = fake.text()
-    # 最长255个字符
-    recharge_remark = fake.text(max_nb_chars=255)
+    # 最长255个char
+    # recharge_remark = fake.text(max_nb_chars=255)
+    recharge_remark = fake.text(max_nb_chars=100)
     recharge_record = RechargeRecord(member_id=member_id, activity_id=activity_id, plan_id=plan_id, recharge_time=recharge_time, recharge_remark=recharge_remark)
     db.session.add(recharge_record)
     db.session.commit()
@@ -389,6 +392,6 @@ def init_all():
     init_member(10)
     init_deal(10, 5)
     init_recharge(100)
-    init_consume(50)
+    init_consume(100)
     return '初始化数据成功'
     
