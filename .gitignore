@@ -2,8 +2,11 @@ test/
 __pycache__/
 .vscode/
 frontend/node_modules/
-frontend/public/
-# frontend/src
+
+frontend/public/assets/
+frontend/public/assets_skydash/
+frontend/public/bootstrap-4.6.2-dist/
+frontend/public/fontawesome-free-6.7.1-web/
 
 # 无用的文件
 doc/临时用.md
