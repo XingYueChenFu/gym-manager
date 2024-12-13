@@ -1,5 +1,5 @@
 <template>
-  <nav class="sidebar"></nav>
+  	<nav class="sidebar"></nav>
 	<nav class="sidebar sidebar-offcanvas" id="sidebar" style="position: fixed !important;">
 		<ul class="nav">
 			<li class="nav-item">
@@ -24,13 +24,13 @@
 				<div class="collapse" id="ui-basic">
 					<ul class="nav flex-column sub-menu">
 						<li class="nav-item">
-							<router-link to="/member/detail" class="nav-link" href="../../pages/ui-features/buttons.html">Details</router-link>
+							<router-link to="/member/detail" class="nav-link">Details</router-link>
 						</li>
 						<li class="nav-item">
-							<router-link to="/member/add" class="nav-link" href="../../pages/ui-features/dropdowns.html">Add new member</router-link>
+							<router-link to="/member/add" class="nav-link">Add new member</router-link>
 						</li>
 						<li class="nav-item">
-							<router-link to="/member/add" class="nav-link" href="../../pages/ui-features/typography.html">Typography</router-link>
+							<router-link to="/member/recharge" class="nav-link">Recharge</router-link>
 						</li>
 					</ul>
 				</div>
@@ -160,24 +160,31 @@
             <div class="table-responsive">
               <table class="table table-striped">
                 <thead>
-                  <tr>
-                    <th> Member </th>
-                    <th> name </th>
-                    <th> ID </th>
-                    <th> phone number </th>
-                    <!-- <th> Status </th> -->
-                  </tr>
+					<tr>
+						<th> Member </th>
+						<th> name </th>
+						<th> ID </th>
+						<th> phone number </th>
+						<!-- <th> Status </th> -->
+					</tr>
                 </thead>
                 <tbody>
                   <!-- 批量生成列表 -->
-                  <tr v-for="(item, index) in items" :key="index">
-                    <router-link to="/uesrpage#" class="nav-link">
+				   <tr>
+                    <!-- <router-link to="/member/detail" class="nav-link"> -->
+                      <td> 1</td>
+                      <td> 2 </td>
+                      <td> 3 </td>
+                      <td> 4 </td>
+                      <!-- <td><label class="badge badge-warning">{{ item.state }}</label></td> 状态信息 -->
+                    <!-- </router-link> -->
+                  </tr>
+                  <tr v-for="(item, index) in items" :key="index"  @click="goToMemberDetail(item.member_id)">
                       <td> {{ item.member_id }} </td>
                       <td> {{ item.nickname }} </td>
                       <td> {{ item.student_card }} </td>
                       <td> {{ item.phone_number }} </td>
                       <!-- <td><label class="badge badge-warning">{{ item.state }}</label></td> --> <!-- 状态信息 -->
-                    </router-link>
                   </tr>
                 </tbody>
               </table>
@@ -193,6 +200,10 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
+import { useMemberStore } from '../stores/member';
+// 获取 router 实例
+const router = useRouter();
 // 定义查询选项
 const Opt: string[] = ['student card', 'nickname', 'phone number'];
 let optIndex = 0;
@@ -271,5 +282,11 @@ const handleEnter = async () => {
   } catch (error) {
     console.error('请求失败:', error);
   }
+};
+
+const goToMemberDetail = (memberId: string) => {
+    const memberStore = useMemberStore();
+    memberStore.setMemberInfo(memberId); // 保存 member_id，便于member detail页面的获取信息
+    router.push('/member/detail');
 };
 </script>

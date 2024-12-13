@@ -24,13 +24,13 @@
 				<div class="collapse" id="ui-basic">
 					<ul class="nav flex-column sub-menu">
 						<li class="nav-item">
-							<router-link to="/member/detail" class="nav-link" href="../../pages/ui-features/buttons.html">Details</router-link>
+							<router-link to="/member/detail" class="nav-link">Details</router-link>
 						</li>
 						<li class="nav-item">
-							<router-link to="/member/add" class="nav-link" href="../../pages/ui-features/dropdowns.html">Add new member</router-link>
+							<router-link to="/member/add" class="nav-link">Add new member</router-link>
 						</li>
 						<li class="nav-item">
-							<router-link to="/member/add" class="nav-link" href="../../pages/ui-features/typography.html">Typography</router-link>
+							<router-link to="/member/recharge" class="nav-link">Recharge</router-link>
 						</li>
 					</ul>
 				</div>
