@@ -41,7 +41,10 @@ def staff_regist_member():
     except Exception as e:
         db.rollback()
         return jsonify({'msg': '数据添加失败', 'code': 5001})
-    return jsonify({'msg': '成功', 'code': 200})  # 前端：注册成功
+    # 找到该用户member_id
+    member = Member.query.filter_by(phone_number=member.phone_number).first()
+    data = {"member_id": member.member_id}
+    return jsonify({'msg': '成功', 'code': 200, 'data': data})  # 前端：注册成功
 
 # [测试中] 查询会员详情 <id>
 # @staff_bp.route('/staff/member/<int:id>', methods=['GET'])
