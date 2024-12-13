@@ -17,7 +17,7 @@ from datetime import datetime
 # [开发中] 添加活动
 @staff_bp.route('/add/deal', methods=['POST']) # /staff/add/deal
 @login_required
-@permission(2)
+# @permission(2)
 def staff_add_deal():
     # 接收一个列表，包含同一activity_id的多个plan_id
     data = request.json.get('data')
@@ -49,7 +49,7 @@ def staff_add_deal():
 # [开发中] 删除活动 <id>
 @staff_bp.route('/delete/deal/<int:id>', methods=['POST']) # /staff/delete/deal/<id>
 @login_required
-@permission(2)
+# @permission(2)
 def staff_delete_deal_by_id(id):
     deals = Deal.query.filter_by(activity_id=id).all()
     if deals is None:
@@ -66,7 +66,7 @@ def staff_delete_deal_by_id(id):
 # [开发中] 删除活动
 @staff_bp.route('/delete/deal', methods=['POST']) # /staff/delete/deal
 @login_required
-@permission(2)
+# @permission(2)
 def staff_delete_deal():
     data = request.json.get('data')
     for item in data:
@@ -76,7 +76,7 @@ def staff_delete_deal():
 # [开发中] 修改活动
 @staff_bp.route('/modify/deal', methods=['POST']) # /staff/modify/deal
 @login_required
-@permission(2)
+# @permission(2)
 def staff_modify_deal():
     data = request.json.get('data')
     for item in data:

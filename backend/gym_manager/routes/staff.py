@@ -21,6 +21,10 @@ from datetime import datetime
 # [测试中] 登录 # /staff/login
 @staff_bp.route('/login', methods=['POST', 'OPTIONS'])
 def do_login():
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
+    
+    print(request.json)  # 确保这里能打印出请求的JSON数据
     # staff = Staff.query.filter(Staff.username == request.json.get('username')).first()
     staff = Staff.query.filter_by(username=request.json.get('username')).first()
     
@@ -29,7 +33,8 @@ def do_login():
         md.update(request.json.get('password').encode('utf-8'))
         if md.hexdigest() == staff.password:
             login_user(staff)
-            return jsonify({'msg': '成功', 'code': 200, 'level': staff.level, 'token': str(uuid.uuid4())}) # 前端：登录成功
+            token = str(uuid.uuid4()) # 没用
+            return jsonify({'msg': '成功', 'code': 200, 'level': staff.level}) # 前端：登录成功
     return jsonify({'msg': '登录失败，账号或密码错误', 'code': 2003})
 
 # [测试中] 退出登录
@@ -42,7 +47,7 @@ def do_logout():
 # [测试中] 注册员工 # 管理员
 @staff_bp.route('/register', methods=['POST', 'OPTIONS'])
 @login_required
-@permission(3) # 管理员
+# @permission(3) # 管理员
 def do_register():
     # md5加密 密码
     md = hashlib.md5()

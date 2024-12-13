@@ -29,12 +29,14 @@ class Member(db.Model):
         json = {
             'member_id': self.member_id,
             'phone_number': self.phone_number,
-            'regist_time': self.regist_time.strfttime('%Y-%m-%d %H:%M:%S'),
+            'regist_time': self.regist_time.isoformat() if self.regist_time else None,
             'nickname': self.nickname,
             'realname': self.realname,
             'id_card': self.id_card,
             'student_card': self.student_card,
             'gender': self.gender, 
+            'email': self.email,  
+            'birthdate': self.birthdate.isoformat() if self.birthdate else None,  
         }
         
         return json

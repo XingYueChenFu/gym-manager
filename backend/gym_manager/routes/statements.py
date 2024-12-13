@@ -17,7 +17,7 @@ from datetime import datetime
 # [开发中] 查看客流量
 @staff_bp.route('/statements/consume', methods=['POST', 'OPTIONS']) # /staff/statements/consume
 @login_required
-@permission(2)
+# @permission(2)
 def staff_statements_consume_get():
     start_time = request.json.get('start_time')
     end_time = request.json.get('end_time')
@@ -44,7 +44,7 @@ def staff_statements_consume_get():
 # [开发中] 查看充值记录
 @staff_bp.route('/statements/recharge', methods=['POST', 'OPTIONS']) # /staff/statements/recharge
 @login_required
-@permission(2)
+# @permission(2)
 def staff_statements_recharge_get():
     start_time = request.json.get('start_time')
     end_time = request.json.get('end_time')

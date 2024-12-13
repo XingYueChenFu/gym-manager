@@ -56,6 +56,8 @@ def create_app(used_config):
     
     # 创建应用
     app = Flask(__name__)
+    # 初始化CORS（允许跨域请求）# 允许所有域名的请求
+    CORS(app)
     app.json = CustomJSONEncoder(app)
     app.json.ensure_ascii = False
     
@@ -114,6 +116,5 @@ def create_app(used_config):
     loginmanager.init_app(app)
     # 初始化excel
     excel.init_excel(app)
-    # 初始化CORS（允许跨域请求）# 允许所有域名的请求
-    CORS(app)
+    
     return app

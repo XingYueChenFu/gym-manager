@@ -17,7 +17,7 @@ from datetime import datetime
 # [测试中] 手动注册会员
 @staff_bp.route('/add/member', methods=['POST', 'OPTIONS'])
 @login_required
-@permission(1)
+# @permission(1)
 def staff_regist_member():
     md = hashlib.md5()
     md.update(request.json.get('phone_number').encode('utf-8'))
@@ -45,7 +45,7 @@ def staff_regist_member():
 # @staff_bp.route('/staff/member/<int:id>', methods=['GET'])
 @staff_bp.route('/query/member/<int:id>', methods=['POST', 'OPTIONS'])
 @login_required
-@permission(1)
+# @permission(1)
 def staff_get_member_by_id(id):
     member = Member.query.filter_by(member_id=id).first()
     if member is None:
@@ -54,10 +54,15 @@ def staff_get_member_by_id(id):
 
 # [测试中] 条件查询会员列表 
 @staff_bp.route('/query/members', methods=['POST', 'OPTIONS'])
-@login_required
-@permission(1)  
-def staff_get_members():  
-    # 获取查询参数  
+# @login_required
+# @permission(1)  
+def staff_get_members():
+    if request.method == 'OPTIONS':  
+        return jsonify({'msg': 'CORS preflight response'}), 200
+    
+    # print(request.args)
+    print(request.json)
+    # 获取查询参数
     page = request.args.get('page', default=1, type=int)  
     per_page = request.args.get('per_page', default=10, type=int)
     # 可选的过滤条件
@@ -90,7 +95,7 @@ def staff_get_members():
 # [测试中] 修改会员信息 <id> # 管理员
 @staff_bp.route('/modify/member/<int:id>', methods=['POST', 'OPTIONS'])
 @login_required
-@permission(1)
+# @permission(1)
 def staff_modify_member(id):
     member = Member.query.filter_by(member_id=id).first()
     if member is None:
@@ -112,7 +117,7 @@ def staff_modify_member(id):
 # [测试中] 删除会员 <id> # 管理员
 @staff_bp.route('/delete/member/<int:id>', methods=['POST', 'OPTIONS'])
 @login_required
-@permission(3) # 管理员
+# @permission(3) # 管理员
 def staff_delete_member(id):
     member = Member.query.filter_by(member_id=id).first()
     if member is None:
