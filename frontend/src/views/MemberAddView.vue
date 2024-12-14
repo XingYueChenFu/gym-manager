@@ -279,12 +279,12 @@ const handleSubmit = async () => {
         },
       }
     );
+    console.log('Response:', response.data);
     // 请求成功后的处理逻辑
     if (response.data.code === 200) {
-      console.log('Response:', response.data);
       alert('Member added successfully!');
       const memberStore = useMemberStore();
-      memberStore.setMemberInfo(response.data.member_id); // 保存 member_id，便于member detail页面的获取信息
+      memberStore.setMemberInfo(response.data.data.member_id); // 保存 member_id，便于member detail页面的获取信息
       router.push('/member/detail');
     }
     else {
