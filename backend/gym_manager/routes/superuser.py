@@ -155,8 +155,9 @@ def show_deal():
     return render_template('superuser/show_deal.html', deals=deals)
 
 # ===== init table data =====
-from faker import Faker
-fake = Faker('zh_CN')
+# from faker import Faker
+# fake = Faker('zh_CN')
+from ..utils.common import fake
 import random  
 from datetime import datetime, timedelta  
 from ..models import Member, Deal, UsageCount, ExpirationTime, RechargeRecord, ConsumeRecord
