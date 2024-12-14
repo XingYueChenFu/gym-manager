@@ -137,46 +137,107 @@
             <div class="card-body">
               <h4 class="card-title">Consumption And Recharge Records</h4>
               <div class="table-responsive pt-3">
-                 <table class="table table-bordered"> <!-- table-bordered -->
+                <table class="table table-bordered">
                   <thead>
                     <tr>
-                      <th> # </th>  <!-- index -->
-                      <th> Recharge time </th>
-					  <th> Deadline </th>
-                      <!-- <th> Time elapsed </th> -->
-                      <th> Count </th>
-					  <th> Consumption rate </th>
-					  <th> Amount </th>
+                      <th> # </th>
+                      <th> First name </th>
+                      <th> Progress </th>
+                      <th> Amount </th>
+                      <th> Deadline </th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-						<td> 1 </td>
-						<td> 2025-07-16 22:09:441 </td>
-						<td> 2027-07-16 22:09:441 </td>
-                        <td> 20 </td>
-					  	<td>
-							<div class="progress" style="height: 20px;">
-								<div class="progress-bar bg-primary" role="progressbar" style="width: 30%;">30</div>
-								<div class="progress-bar bg-success" role="progressbar" style="width: 40%;">70</div>
-							</div>
-						</td>
-						<td> $ 77.99 </td>
+                      <td> 1 </td>
+                      <td> Herman Beck </td>
+                      <td>
+                        <div class="progress">
+                          <div class="progress-bar bg-success" role="progressbar" style="width: 25%"
+                            aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </td>
+                      <td> $ 77.99 </td>
+                      <td> May 15, 2015 </td>
                     </tr>
-                    <tr v-for="(item, index) in items" :key="index">
-						<td>{{ `${index+1}` }}</td>
-						<td>{{ item.time }}</td>           <!-- 充值时间 -->
-						<td>{{ item.deadline }}</td>
-						<td>{{ item.count }}</td>
-						<td>
-							<div class="progress" style="height: 20px;">
-								<div class="progress-bar" :class="item.rate.c1 ? 'bg-primary' : 'bg-success'" role="progressbar" :style="`width: ${item.rate.r1}%;`">{{item.rate.r1}}%</div>
-								<div class="progress-bar" :class="item.rate.c2 ? 'bg-primary' : 'bg-success'" role="progressbar" :style="`width: ${item.rate.r2 - item.rate.r1}%;`">{{item.rate.r2}}%</div>
-							</div>
-						</td>
-						<td>{{ item.amount }}</td>
+                    <tr v-for="(ddl, count, index) in items" :key="index">
+                      <td>{{ `${index+1}` }}</td>
+                      <td>{{ count }}</td>
+                      <td>{{ ddl }}</td>
+                      <!-- <td>{{ time }}</td> --> <!-- 充值时间 -->
                     </tr>
-                    details
+                    <tr>
+                      <td> 2 </td>
+                      <td> Messsy Adam </td>
+                      <td>
+                        <div class="progress">
+                          <div class="progress-bar bg-danger" role="progressbar" style="width: 75%"
+                            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </td>
+                      <td> $245.30 </td>
+                      <td> July 1, 2015 </td>
+                    </tr>
+                    <tr>
+                      <td> 3 </td>
+                      <td> John Richards </td>
+                      <td>
+                        <div class="progress">
+                          <div class="progress-bar bg-warning" role="progressbar" style="width: 90%"
+                            aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </td>
+                      <td> $138.00 </td>
+                      <td> Apr 12, 2015 </td>
+                    </tr>
+                    <tr>
+                      <td> 4 </td>
+                      <td> Peter Meggik </td>
+                      <td>
+                        <div class="progress">
+                          <div class="progress-bar bg-primary" role="progressbar" style="width: 50%"
+                            aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </td>
+                      <td> $ 77.99 </td>
+                      <td> May 15, 2015 </td>
+                    </tr>
+                    <tr>
+                      <td> 5 </td>
+                      <td> Edward </td>
+                      <td>
+                        <div class="progress">
+                          <div class="progress-bar bg-danger" role="progressbar" style="width: 35%"
+                            aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </td>
+                      <td> $ 160.25 </td>
+                      <td> May 03, 2015 </td>
+                    </tr>
+                    <tr>
+                      <td> 6 </td>
+                      <td> John Doe </td>
+                      <td>
+                        <div class="progress">
+                          <div class="progress-bar bg-info" role="progressbar" style="width: 65%"
+                            aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </td>
+                      <td> $ 123.21 </td>
+                      <td> April 05, 2015 </td>
+                    </tr>
+                    <tr>
+                      <td> 7 </td>
+                      <td> Henry Tom </td>
+                      <td>
+                        <div class="progress">
+                          <div class="progress-bar bg-warning" role="progressbar" style="width: 20%"
+                            aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                      </td>
+                      <td> $ 150.00 </td>
+                      <td> June 16, 2015 </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -202,91 +263,13 @@ const memberStore = useMemberStore();
 const memberId = memberStore.$state.memberInfo.member_id;
 console.log(memberStore.$state.memberInfo.member_id);  // 要展示的 member_id
 // 定义表格项的接口
-interface Rate {
-  c1: boolean;
-  r1: number;
-  c2: boolean;
-  r2: number;
-}
 interface Item {
-  time: string;
-  deadline: string;
-  count: number;       // 充值得到的总数量
-  count_used: number;  // 已使用数量
-  rate: Rate;
-  amount: number;
+  ddl: string;
+  count: number;
+  // time: string;
 }
 // 定义响应式数据存储表格项
-// const items = ref<Item[]>([]);
-const items = ref<Item[]>([
-  {
-    time: '2025-07-16 22:09:441',
-    deadline: '2027-07-16 22:09:441',
-	count: 20,
-	count_used: 10,
-    rate: {
-      c1: true,
-      r1: 30,
-      c2: false,
-      r2: 50,
-    },
-    amount: 77.99,
-  },
-]);
-
-const calculateTimeRatio = (time:string, deadline:string) => {
-  // 将时间字符串解析为 Date 对象
-  const startTime = new Date(time).getTime();;
-  const endTime = new Date(deadline).getTime();;
-  const now = Date.now() // new Date().getTime(); // 当前时间
-
-  // 检查时间有效性
-  if (now < startTime) {
-    return 0; // 如果当前时间早于起始时间，返回 0%
-  }
-  if (now > endTime) {
-    return 100; // 如果当前时间晚于截止时间，返回 100%
-  }
-
-  // 计算时间差（毫秒）
-  const totalDuration = endTime - startTime; // 总时间跨度
-  const elapsedDuration = now - startTime; // 已经过的时间
-
-  // 计算比例
-  const ratio = (elapsedDuration / totalDuration) * 100;
-
-  return ratio; // 返回保留两位小数的百分比
-};
-
-// 示例输入
-// const time = '2025-07-16 22:09:44';
-// const deadline = '2027-07-16 22:09:44';
-
-// 调用函数
-// const ratio = calculateTimeRatio(time, deadline);
-// console.log(typeof(ratio));
-// console.log(`已过时间的比例：${ratio}%`);
-
-const calculateRate = (count: number, count_used: number, time:string, deadline:string) => {
-	let rate1 :number = Math.floor((count_used / count) * 100);
-	let rate2 :number = Math.floor(calculateTimeRatio(time, deadline));
-	console.log(rate1, rate2);
-	const d_rate :number = rate1 - rate2;
-	if (d_rate < 0) {
-		rate2 = -d_rate;
-	} else {
-		rate1 = rate2;
-		rate2 = d_rate;
-	}
-	return {
-		c1: d_rate > 0,
-		r1: rate1,
-		c2: d_rate < 0,
-		r2: rate1 + rate2,
-	};
-};
-
-
+const items = ref<Item[]>([]);
 // 获取用户充值和消费记录的函数
 const fetchMemberReCharge = async () => {
   try {
@@ -308,13 +291,10 @@ const fetchMemberReCharge = async () => {
     // 响应处理
     console.log(response.data.data);
     if (response.data.code === 200) {
-		items.value = response.data.data;  // 将返回数据赋值给 items
-		items.value.forEach((item) => {
-			item.rate = calculateRate(item.count, item.count_used, item.time, item.deadline);
-		});
-      	console.log("用户信息已填充！");
+      items.value = response.data.data;  // 将返回数据赋值给 items
+      console.log("用户信息已填充！");
     } else {
-      	alert("不存在该会员！");
+      alert("不存在该会员！");
     }
   } catch (error) {
     console.error("获取用户信息失败:", error);

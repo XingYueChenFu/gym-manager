@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 export const useMemberStore = defineStore('member', {
 	state: () => ({
 		memberInfo: {
-			member_id: '0010',
+			member_id: '',
 		},
 	}),
 	actions: {

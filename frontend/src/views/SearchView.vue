@@ -223,7 +223,8 @@ interface Item {
   // state: string,
 }
 
-const items = ref<Item[]>([]); // 定义响应式数据存储表格项
+// 定义响应式数据存储表格项
+const items = ref<Item[]>([]);
 
 // 响应式数据
 const inputValue = ref(''); // 绑定输入框的内容
