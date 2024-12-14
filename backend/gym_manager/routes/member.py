@@ -32,6 +32,10 @@ def staff_regist_member():
     member.student_card = request.json.get('student_card')
     member.gender = request.json.get('gender')
     member.password = md.hexdigest()
+    member.email = request.json.get('email')
+    member.birthdate = request.json.get('birthdate')
+    member.campus = request.json.get('campus')
+    member.address = request.json.get('address')
 
     if db.session.query(Member).filter_by(phone_number=member.phone_number).first() is not None:
         return jsonify({'msg': '手机号码已存在', 'code': 2114})
@@ -78,16 +82,18 @@ def staff_get_members():
     # 可选的过滤条件
     nickname = request.json.get('nickname', None)
     phone_number = request.json.get('phone_number', None)
+    student_card = request.json.get('student_card', None)
     print(request.json.get('nickname', None))
 
     # 构建查询
     query = Member.query
 
-    if nickname:
-        query = query.filter(Member.nickname.like(
-            f'%{nickname}%'))  # like:区分大小写 ilike:不区分大小写
+    if nickname: # like:区分大小写 ilike:不区分大小写
+        query = query.filter(Member.nickname.like(f'%{nickname}%'))  # 模糊查询
     if phone_number:
-        query = query.filter(Member.phone_number == phone_number)
+        query = query.filter(Member.phone_number.like(f'%{phone_number}%'))
+    if student_card:
+        query = query.filter(Member.student_card.like(f'%{student_card}%'))
     # 总页数 query数 除以 每页数
     total = (query.count() - 1) // per_page + 1
     # 分页查询 (查询结果为空的话items.items将返回空列表)

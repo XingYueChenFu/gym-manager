@@ -1,7 +1,7 @@
 from .. import db, permission
 from ..base import staff_bp
 
-from ..models import Staff, Member, Deal
+from ..models import Staff, Member, Deal, ExpirationTime
 from flask import render_template, request, jsonify, g
 
 from flask_login import login_user, logout_user, login_required, \
