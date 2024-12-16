@@ -174,4 +174,22 @@ def staff_get_deal_now():
     for deal in deals:
         data.append(deal.to_json())
     return jsonify({'msg': '成功', 'code': 200, 'data': data})
+    """
+    输出的data:
+    [
+        {
+            'activity_id': int,
+            'plan_id': int,
+            'activity_name': str,
+            'start_time': str,
+            'end_time': str,
+            'recharge_type': str,
+            'recharge_count': int,
+            'lifespan': int,
+            'recharge_day': int,
+            'amount': str,
+            'activity_remark': str
+        },
+    ]
+    """
 
