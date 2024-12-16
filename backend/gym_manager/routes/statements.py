@@ -1,7 +1,7 @@
 from .. import db, permission
 from ..base import staff_bp
 
-from ..models import ConsumeRecord, RechargeRecord, Deal
+from ..models import ConsumeRecord, RechargeRecord, Deal, Member
 from flask import render_template, request, jsonify, g
 
 from flask_login import login_user, logout_user, login_required, \
@@ -14,11 +14,14 @@ import hashlib
 import uuid
 from datetime import datetime
 
-# [开发中] 查看客流量
-@staff_bp.route('/statements/consume', methods=['POST', 'OPTIONS']) # /staff/statements/consume
+# [开发中] 查看客流量 消费人次
+@staff_bp.route('/statements/new_consume', methods=['POST', 'OPTIONS']) # /staff/statements/new_consume
 # @login_required
 # @permission(2)
-def staff_statements_consume_get():
+def staff_statements_new_consume_get():
+    if request.method == 'OPTIONS':
+        return jsonify({'msg': 'CORS preflight response'}), 200
+    
     start_time = request.json.get('start_time')
     end_time = request.json.get('end_time')
     """
@@ -41,11 +44,14 @@ def staff_statements_consume_get():
     return_data = {'code': 200, 'msg': '成功','data': consume_dict}
     return jsonify(return_data)
     
-# [开发中] 查看充值记录
-@staff_bp.route('/statements/recharge', methods=['POST', 'OPTIONS']) # /staff/statements/recharge
+# [开发中] 查看充值金额
+@staff_bp.route('/statements/new_recharge', methods=['POST', 'OPTIONS']) # /staff/statements/new_recharge
 # @login_required
 # @permission(2)
-def staff_statements_recharge_get():
+def staff_statements_new_recharge_get():
+    if request.method == 'OPTIONS':
+        return jsonify({'msg': 'CORS preflight response'}), 200
+    
     start_time = request.json.get('start_time')
     end_time = request.json.get('end_time')
     
@@ -66,3 +72,79 @@ def staff_statements_recharge_get():
         recharge_dict[date] += deal.amount
     return_data = {'code': 200, 'msg': '成功','data': recharge_dict}
     return jsonify(return_data)
+
+# [开发中] 查看新增会员
+@staff_bp.route('/statements/new_member', methods=['POST', 'OPTIONS']) # /staff/statements/member
+# @login_required
+# @permission(2)
+def staff_statements_new_member_get():
+    if request.method == 'OPTIONS':
+        return jsonify({'msg': 'CORS preflight response'}), 200
+    
+    start_time = request.json.get('start_time')
+    end_time = request.json.get('end_time')
+    """
+    从member中找到regist_time在start_time和end_time之间的记录
+    每天统计一次
+    返回一个有序字典，包含regist_time和create_count
+    """
+    members = db.session.query(Member).filter(Member.regist_time >= start_time, Member.regist_time <= end_time).all()
+    members = sorted(members, key=lambda x: x.regist_time)
+    member_dict = {}
+    # 添加键值对 键为日期，值为当天新增会员数（默认为0）
+    for member in members:
+        date = member.regist_time.strftime('%Y-%m-%d')
+        if date not in member_dict:
+            member_dict[date] = 0
+    # 统计每天的新增会员数
+    for member in members:
+        date = member.regist_time.strftime('%Y-%m-%d')
+        member_dict[date] += 1
+        
+    return_data = {'code': 200, 'msg': '成功','data': member_dict}
+    return jsonify(return_data)
+
+# ===== 貌似已经在上面实现了 =====
+# # [开发中] 查看消费人次
+# @staff_bp.route('/statements/new_consumer', methods=['POST', 'OPTIONS']) # /staff/statements/new_consumer
+# # @login_required
+# # @permission(2)
+# def staff_statements_new_consumer_get():
+#     if request.method == 'OPTIONS':
+#         return jsonify({'msg': 'CORS preflight response'}), 200
+    
+#     start_time = request.json.get('start_time')
+#     end_time = request.json.get('end_time')
+#     """
+#     从consume_record中找到consume_time在start_time和end_time之间的记录
+#     每天统计一次
+#     返回一个有序字典，包含consume_time和consume_count
+#     """
+#     consume_records = db.session.query(ConsumeRecord).filter(ConsumeRecord.consume_time >= start_time, ConsumeRecord.consume_time <= end_time).all()
+#     consume_records = sorted(consume_records, key=lambda x: x.consume_time)
+#     consume_record_dict = {}
+#     # 添加键值对 键为日期，值为当天消费人次（默认为0）
+#     for record in consume_records:
+#         date = record.consume_time.strftime('%Y-%m-%d')
+#         if date not in consume_record_dict:
+#             consume_record_dict[date] = 0
+#     # 统计每天的消费人次
+#     for record in consume_records:
+#         date = record.consume_time.strftime('%Y-%m-%d')
+#         consume_record_dict[date] += 1
+#     return_data = {'code': 200, 'msg': '成功','data': consume_record_dict}
+#     return jsonify(return_data)
+
+# # [开发中] 查看充值金额
+# @staff_bp.route('/statements/new_recharge', methods=['POST', 'OPTIONS']) # /staff/statements/new_recharge
+# # @login_required
+# # @permission(2)
+# def staff_statements_new_recharge_get():
+#     if request.method == 'OPTIONS':
+#         return jsonify({'msg': 'CORS preflight response'}), 200
+    
+#     start_time = request.json.get('start_time')
+#     end_time = request.json.get('end_time')
+#     """
+#     从
+#     """
