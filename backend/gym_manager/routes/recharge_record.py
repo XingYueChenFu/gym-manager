@@ -14,7 +14,7 @@ import hashlib
 import uuid
 from datetime import datetime, timedelta
 
-def recharge(member_id, activity_id, plan_id, recharge_time=datetime.now()):
+def recharge(member_id, activity_id, plan_id, recharge_time=datetime.now(), recharge_remark=None):
     # member_id: 会员id activity_id: 活动id plan_id: 计划id
     # 在recharge_record 与 usage_count或expiration_time 中添加记录
     
@@ -29,14 +29,10 @@ def recharge(member_id, activity_id, plan_id, recharge_time=datetime.now()):
         return False
     
     # 2.记录充值记录
-    recharge_time = recharge_time
-    # recharge_remark = fake.text()
-    # 最长255个char
-    # recharge_remark = fake.text(max_nb_chars=255)
-    recharge_remark = fake.text(max_nb_chars=100)
+    # recharge_remark = fake.text(max_nb_chars=100) # 最长100个中文字符
     recharge_record = RechargeRecord(member_id=member_id, activity_id=activity_id, plan_id=plan_id, recharge_time=recharge_time, recharge_remark=recharge_remark)
     db.session.add(recharge_record)
-    db.session.commit()
+    
     # 3.增加使用次数(次数卡)或者延长有效期(天数卡)
     if deal.recharge_type == 'time': # 天数卡
         et = db.session.query(ExpirationTime).filter_by(member_id=member_id).first()
@@ -79,5 +75,10 @@ def staff_recharge():
     activity_id = request.json.get('activity_id')
     plan_id = request.json.get('plan_id')
     recharge_time = request.json.get('recharge_time')
-    recharge_count = request.json.get('recharge_count')
-    pass
+    recharge_remark = request.json.get('recharge_remark')
+    
+    result = recharge(member_id, activity_id, plan_id, recharge_time, recharge_remark)
+    if result:
+        return jsonify({'msg': '成功', 'code': 200}), 200
+    else:
+        return jsonify({'msg': '数据添加失败', 'code': 5001})

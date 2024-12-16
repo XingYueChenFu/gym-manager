@@ -244,7 +244,7 @@ def init_deal(n, m=5):
         for plan_id in range(random.randrange(1,m+1,1)):
             start_time = fake.date_time_between(start_date='-5y', end_date='now')
             end_time = start_time + timedelta(days=random.randrange(1, 30, 1))
-            recharge_type = random.choice(['time', 'day'])
+            recharge_type = random.choice(['time', 'count'])
             amount = random.uniform(10, 1000)
             if recharge_type == 'time':
                 recharge_day = random.randrange(1, 30, 1)
