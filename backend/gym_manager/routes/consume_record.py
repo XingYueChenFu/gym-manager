@@ -60,8 +60,8 @@ def consume(member_id, consume_time=datetime.now()):
             return False
 
 @staff_bp.route('/consume/<int:id>', methods=['POST', 'OPTIONS'])
-@login_required
-@permission(1)
+# @login_required
+# @permission(1)
 def staff_consume(id):
     if request.method == 'OPTIONS':
         return jsonify({'msg': 'CORS preflight response'}), 200
@@ -73,3 +73,13 @@ def staff_consume(id):
         return jsonify({'code': 200, 'msg': '成功'})
     else:
         return jsonify({'code': 5003, 'msg': '数据修改失败'})
+    
+@staff_bp.route('/query/consume_record/<int:id>', methods=['POST', 'OPTIONS'])
+# @login_required
+# @permission(1)
+def staff_query_consume_record_by_id(id):
+    if request.method == 'OPTIONS':
+        return jsonify({'msg': 'CORS preflight response'}), 200
+    
+    member_id = id
+    
