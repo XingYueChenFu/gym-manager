@@ -41,7 +41,20 @@ def staff_statements_new_consume_get():
     for record in consume_records:
         date = record.consume_time.strftime('%Y-%m-%d')
         consume_dict[date] += 1
-    return_data = {'code': 200, 'msg': '成功','data': consume_dict}
+    """
+    consume_list
+    [
+        {'time': '2021-01-01', 'value': 10},
+        {'time': '2021-01-02', 'value': 20},
+    ]
+    """
+    consume_list = []
+    for key, value in consume_dict.items():
+        consume_list.append({'time': key, 'value': value})
+    consume_list = sorted(consume_list, key=lambda x: x['time'])
+    total = sum([item['value'] for item in consume_list])
+    
+    return_data = {'code': 200, 'msg': '成功','data': {'total': total, 'items': consume_list}}
     return jsonify(return_data)
     
 # [开发中] 查看充值金额
@@ -70,7 +83,14 @@ def staff_statements_new_recharge_get():
         # 根据activity_id与plan_id找到对应的deal，再找到对应的amount
         deal = db.session.query(Deal).filter(Deal.activity_id == record.activity_id, Deal.plan_id == record.plan_id).first()
         recharge_dict[date] += deal.amount
-    return_data = {'code': 200, 'msg': '成功','data': recharge_dict}
+        
+    recharge_list = []
+    for key, value in recharge_dict.items():
+        recharge_list.append({'time': key, 'value': value})
+    recharge_list = sorted(recharge_list, key=lambda x: x['time'])
+    total = sum([item['value'] for item in recharge_list])
+    
+    return_data = {'code': 200, 'msg': '成功','data': {'total': total, 'items': recharge_list}}
     return jsonify(return_data)
 
 # [开发中] 查看新增会员
@@ -100,8 +120,14 @@ def staff_statements_new_member_get():
     for member in members:
         date = member.regist_time.strftime('%Y-%m-%d')
         member_dict[date] += 1
-        
-    return_data = {'code': 200, 'msg': '成功','data': member_dict}
+    
+    member_list = []
+    for key, value in member_dict.items():
+        member_list.append({'time': key, 'value': value})
+    member_list = sorted(member_list, key=lambda x: x['time'])
+    total = sum([item['value'] for item in member_list])
+    
+    return_data = {'code': 200, 'msg': '成功','data': {'total': total, 'items': member_list}}
     return jsonify(return_data)
 
 # ===== 貌似已经在上面实现了 =====

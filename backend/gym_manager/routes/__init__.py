@@ -8,5 +8,6 @@ from . import staff
 from . import usage_count
 
 from . import record
+from . import statements
 
 from . import superuser # test 用，之后删
