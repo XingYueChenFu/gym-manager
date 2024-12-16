@@ -296,4 +296,22 @@ const handleSubmit = async () => {
     alert('Failed to add member.');
   }
 };
+const search_opt = ref({
+  type: 0,
+  value: '',
+});
+const goToMemberAdd = () => {
+	const memberStore = useMemberStore();
+  search_opt.value = memberStore.$state.memberAdd; // 保存搜索信息，便于member add页面的获取信息
+  if (search_opt.value.type === 0) {
+    formData.value.student_card = search_opt.value.value;
+  }
+  else if (search_opt.value.type === 1) {
+    formData.value.nickname = search_opt.value.value;
+  }
+  else if (search_opt.value.type === 2) {
+    formData.value.phone_number = search_opt.value.value;
+  }
+};
+goToMemberAdd()
 </script>

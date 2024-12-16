@@ -1,5 +1,5 @@
 <template>
-  <nav class="sidebar"></nav>
+	<nav class="sidebar"></nav>
 	<nav class="sidebar sidebar-offcanvas" id="sidebar" style="position: fixed !important;">
 		<ul class="nav">
 			<li class="nav-item">
@@ -120,11 +120,11 @@
 				</div>
 			</li>
 			<!-- <li class="nav-item">
-              <a class="nav-link" href="../../../docs/documentation.html">
-                <i class="icon-paper menu-icon"></i>
-                <span class="menu-title">Documentation</span>
-              </a>
-            </li> -->
+				<a class="nav-link" href="../../../docs/documentation.html">
+				<i class="icon-paper menu-icon"></i>
+				<span class="menu-title">Documentation</span>
+				</a>
+			</li> -->
 		</ul>
 	</nav>
 
@@ -136,7 +136,8 @@
           <div class="card">
             <div class="card-body">
               <h4 class="card-title">Consumption And Recharge Records</h4>
-              <div class="table-responsive pt-3">
+			  <p class="card-description"> Count </p>
+              <div class="table-responsive pb-3">
                  <table class="table table-bordered"> <!-- table-bordered -->
                   <thead>
                     <tr>
@@ -163,20 +164,48 @@
 						</td>
 						<td> $ 77.99 </td>
                     </tr>
-                    <tr v-for="(item, index) in items" :key="index">
+                    <tr v-for="(item, index) in counts" :key="index">
 						<td>{{ `${index+1}` }}</td>
 						<td>{{ item.time }}</td>           <!-- 充值时间 -->
 						<td>{{ item.deadline }}</td>
 						<td>{{ item.count }}</td>
 						<td>
 							<div class="progress" style="height: 20px;">
-								<div class="progress-bar" :class="item.rate.c1 ? 'bg-primary' : 'bg-success'" role="progressbar" :style="`width: ${item.rate.r1}%;`">{{item.rate.r1}}%</div>
-								<div class="progress-bar" :class="item.rate.c2 ? 'bg-primary' : 'bg-success'" role="progressbar" :style="`width: ${item.rate.r2 - item.rate.r1}%;`">{{item.rate.r2}}%</div>
+								<div class="progress-bar bg-success" role="progressbar" :style="`width: ${item.rate}%;`">{{item.rate}}%</div>
 							</div>
 						</td>
 						<td>{{ item.amount }}</td>
                     </tr>
-                    details
+                  </tbody>
+                </table>
+              </div>
+			  <p class="card-description"> Times </p>
+			  <div class="table-responsive pb-3">
+                 <table class="table table-bordered"> <!-- table-bordered -->
+                  <thead>
+                    <tr>
+                      <th> # </th>  <!-- index -->
+                      <th> Recharge time </th>
+					  <!-- <th> Deadline </th> -->
+                      <!-- <th> Time elapsed </th> -->
+                      <th> Days </th>
+					  <!-- <th> Consumption rate </th> -->
+					  <th> Amount </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item, index) in times" :key="index">
+						<td>{{ `${index+1}` }}</td>
+						<td>{{ item.time }}</td>           <!-- 充值时间 -->
+						<!-- <td>{{ item.deadline }}</td> -->
+						<td>{{ item.count }}</td>
+						<!-- <td>
+							<div class="progress" style="height: 20px;">
+								<div class="progress-bar bg-success" role="progressbar" :style="`width: ${item.rate}%;`">{{item.rate}}%</div>
+							</div>
+						</td> -->
+						<td>{{ item.amount }}</td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -202,34 +231,33 @@ const memberStore = useMemberStore();
 const memberId = memberStore.$state.memberInfo.member_id;
 console.log(memberStore.$state.memberInfo.member_id);  // 要展示的 member_id
 // 定义表格项的接口
-interface Rate {
-  c1: boolean;
-  r1: number;
-  c2: boolean;
-  r2: number;
-}
 interface Item {
-  time: string;
-  deadline: string;
-  count: number;       // 充值得到的总数量
-  count_used: number;  // 已使用数量
-  rate: Rate;
-  amount: number;
+  time: string;        // 充值的时间
+  deadline: string;    // 截止的时间 or none
+  count: number;       // 充值得到的总数量 or 时间
+  rate: number;        // 时间过去的比例
+  amount: number;      // 充值的金额
 }
 // 定义响应式数据存储表格项
+const total_count = ref<number>(0);
+const total_time = ref<number>(0);
 // const items = ref<Item[]>([]);
-const items = ref<Item[]>([
+const counts = ref<Item[]>([
   {
     time: '2025-07-16 22:09:441',
     deadline: '2027-07-16 22:09:441',
 	count: 20,
-	count_used: 10,
-    rate: {
-      c1: true,
-      r1: 30,
-      c2: false,
-      r2: 50,
-    },
+    rate: 20,
+    amount: 77.99,
+  },
+]);
+
+const times = ref<Item[]>([
+  {
+    time: '2025-07-16 22:09:441',
+	deadline: '2027-07-16 22:09:441',
+	count: 20,
+    rate: 30,
     amount: 77.99,
   },
 ]);
@@ -262,30 +290,10 @@ const calculateTimeRatio = (time:string, deadline:string) => {
 // const time = '2025-07-16 22:09:44';
 // const deadline = '2027-07-16 22:09:44';
 
-// 调用函数
+// // 调用函数
 // const ratio = calculateTimeRatio(time, deadline);
 // console.log(typeof(ratio));
 // console.log(`已过时间的比例：${ratio}%`);
-
-const calculateRate = (count: number, count_used: number, time:string, deadline:string) => {
-	let rate1 :number = Math.floor((count_used / count) * 100);
-	let rate2 :number = Math.floor(calculateTimeRatio(time, deadline));
-	console.log(rate1, rate2);
-	const d_rate :number = rate1 - rate2;
-	if (d_rate < 0) {
-		rate2 = -d_rate;
-	} else {
-		rate1 = rate2;
-		rate2 = d_rate;
-	}
-	return {
-		c1: d_rate > 0,
-		r1: rate1,
-		c2: d_rate < 0,
-		r2: rate1 + rate2,
-	};
-};
-
 
 // 获取用户充值和消费记录的函数
 const fetchMemberReCharge = async () => {
@@ -299,7 +307,7 @@ const fetchMemberReCharge = async () => {
 
     // 发送请求
     const response = await axios.post(
-      `http://localhost:5000/staff/query/usage_count/${memberId}`,
+      `http://localhost:5000/staff/query/record/${memberId}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -307,12 +315,18 @@ const fetchMemberReCharge = async () => {
       });
     // 响应处理
     console.log(response.data.data);
-    if (response.data.code === 200) {
-		items.value = response.data.data;  // 将返回数据赋值给 items
-		items.value.forEach((item) => {
-			item.rate = calculateRate(item.count, item.count_used, item.time, item.deadline);
+	  if (response.data.code === 200) {
+		total_count.value = response.data.data.total_count;  // 将返回数据赋值给 items
+		total_time.value = response.data.data.total_time;  // 将返回数据赋值给 items
+		counts.value = response.data.data.counts;  // 将返回数据赋值给 items
+		times.value = response.data.data.times;  // 将返回数据赋值给 items
+		counts.value.forEach((item) => {
+			item.rate = calculateTimeRatio(item.time, item.deadline);
 		});
-      	console.log("用户信息已填充！");
+		times.value.forEach((item) => {
+			item.rate = calculateTimeRatio(item.time, item.deadline);
+		});
+		console.log("用户信息已填充！");
     } else {
       	alert("不存在该会员！");
     }

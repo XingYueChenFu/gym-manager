@@ -155,7 +155,7 @@
           <div class="card-body">
 
             <h4 class="card-title">Member List</h4>
-            <p class="card-description"> Add class <code>.table-striped</code>
+            <p class="card-description"> No desired results found? <code> <span @click="goToMemberAdd()">Add a new member.</span></code>
             </p>
             <div class="table-responsive">
               <table class="table table-striped">
@@ -275,7 +275,11 @@ const handleEnter = async () => {
     console.error('请求失败:', error);
   }
 };
-
+const goToMemberAdd = () => {
+	const memberStore = useMemberStore();
+	memberStore.setMemberAddInfo(optIndex, inputValue.value); // 保存搜索信息，便于member add页面的获取信息
+    router.push('/member/add');
+};
 const goToMemberDetail = (memberId: string) => {
     const memberStore = useMemberStore();
     memberStore.setMemberInfo(memberId); // 保存 member_id，便于member detail页面的获取信息
