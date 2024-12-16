@@ -17,6 +17,7 @@ from datetime import datetime, timedelta
 def recharge(member_id, activity_id, plan_id, recharge_time=datetime.now(), recharge_remark=None):
     # member_id: 会员id activity_id: 活动id plan_id: 计划id
     # 在recharge_record 与 usage_count或expiration_time 中添加记录
+    recharge_time = datetime.now() if recharge_time is None else recharge_time
     
     # 1. 判断member或deal是否存在
     member = db.session.query(Member).filter_by(member_id=member_id).first()
