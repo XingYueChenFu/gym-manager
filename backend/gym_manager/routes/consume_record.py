@@ -59,3 +59,17 @@ def consume(member_id, consume_time=datetime.now()):
             print(f'\033[1;31m[ERROR]\033[0m consume {member_id} failed.')
             return False
 
+@staff_bp.route('/consume/<int:id>', methods=['POST', 'OPTIONS'])
+@login_required
+@permission(1)
+def staff_consume(id):
+    if request.method == 'OPTIONS':
+        return jsonify({'msg': 'CORS preflight response'}), 200
+
+    member_id = id
+    consume_time = datetime.now()
+    result = consume(member_id, consume_time)
+    if result:
+        return jsonify({'code': 200, 'msg': '成功'})
+    else:
+        return jsonify({'code': 5003, 'msg': '数据修改失败'})

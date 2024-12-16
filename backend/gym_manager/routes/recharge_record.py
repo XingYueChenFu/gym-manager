@@ -69,8 +69,20 @@ def recharge(member_id, activity_id, plan_id, recharge_time=datetime.now(), rech
 # @login_required
 # @permission(1)
 def staff_recharge():
+    """
+    传入：json
+    {
+        member_id: int,
+        activity_id: int,
+        plan_id: int,
+        recharge_time: datetime,
+        recharge_remark: str (可省略)
+    }
+    """
+    
     if request.method == 'OPTIONS':  
         return jsonify({'msg': 'CORS preflight response'}), 200
+    
     member_id = request.json.get('member_id')
     activity_id = request.json.get('activity_id')
     plan_id = request.json.get('plan_id')
