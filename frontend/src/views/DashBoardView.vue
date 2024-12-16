@@ -466,7 +466,7 @@ function formatDate(date: Date): string {
 const todayDate = new Date();
 const yesterdayDate = new Date(todayDate);
 yesterdayDate.setDate(todayDate.getDate() - 1);
-
+console.log("type: ", typeof(todayDate));
 // 本周开始和结束日期（假设周一为一周的开始）
 const startOfWeek = new Date(todayDate);
 startOfWeek.setDate(todayDate.getDate() - 7);
@@ -481,19 +481,32 @@ const yesterday = ref(`Yesterday (${formatDate(yesterdayDate)})`);
 const week = ref(`Last Week (${formatDate(startOfWeek)} - `); // ref(`Last Week (${formatDate(startOfWeek)} - ${formatDate(endOfWeek)})`);
 const month = ref(`Last Month (${formatDate(startOfPast30Days)} - `); // ref(`Last Week (${formatDate(startOfWeek)} - ${formatDate(endOfWeek)})`);
 
+function formatDate2(dateString:Date) {
+  const date = new Date(formatDate(dateString)); // 解析日期字符串
+
+  // 获取日期组件
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从 0 开始，需要加 1
+  const day = String(date.getDate()).padStart(2, '0');
+
+  // 格式化为所需的字符串格式
+  return `${year}-${month}-${day} `;
+}
+
 // 明确定义 datas 数组类型
 const datas: Ref<string>[] = [today, yesterday, week, month];
 const start_times = [
-	formatDate(todayDate),
-	formatDate(yesterdayDate),
-	formatDate(startOfWeek),
-	formatDate(startOfPast30Days),
+	formatDate2(todayDate)+"00:00:00",
+	formatDate2(yesterdayDate)+"00:00:00",
+	formatDate2(startOfWeek)+"00:00:00",
+	formatDate2(startOfPast30Days)+"00:00:00",
 ];
 
 const end_times = [
-	formatDate(todayDate),
-	formatDate(yesterdayDate),
-	formatDate(todayDate),
+	formatDate2(todayDate)+"23:59:59",
+	formatDate2(yesterdayDate)+"23:59:59",
+	formatDate2(todayDate)+"23:59:59",
+	formatDate2(todayDate)+"23:59:59",
 ];
 
 const time_slots  =  [
@@ -529,8 +542,8 @@ const selectDate = (opt: number) => {
     } else {
         console.error('Invalid option index:', opt);
 	}
-	console.log(time_slot);
-	fetchNewMember();
+	updateData(opt);
+	console.log(time_slot.value);
 };
 
 const newMember :Ref<number> = ref(0);
@@ -548,15 +561,15 @@ const fetchNewMember = async () => {
   try {
     // 发送请求
     const response = await axios.post(
-		`http://localhost:5000/staff/statements/new_consume`,
-		time_slot,
+		`http://localhost:5000/staff/statements/new_member`,
+		time_slot.value,
 		{
 			headers: {
 			'Content-Type': 'application/json',
 			},
 		});
     // 响应处理
-    console.log(response.data.data);
+    console.log("NewMember: ",response.data.data);
 	  if (response.data.code === 200) {
 		// 填充用户信息
 		newMember.value = response.data.data.total;
@@ -570,5 +583,65 @@ const fetchNewMember = async () => {
     alert("获取用户信息失败，请稍后再试！");
   }
 };
+const fetchMemberTraffic = async () => {
+  try {
+    // 发送请求
+    const response = await axios.post(
+		`http://localhost:5000/staff/statements/new_consume`,
+		time_slot.value,
+		{
+			headers: {
+			'Content-Type': 'application/json',
+			},
+		});
+    // 响应处理
+    console.log(response.data.data);
+	  if (response.data.code === 200) {
+		// 填充用户信息
+		memberTraffic.value = response.data.data.total;
+		memberTrafficData.value = response.data.data.items;
+		console.log("用户信息已填充！");
+    } else {
+      	alert("不存在该会员！");
+    }
+  } catch (error) {
+    console.error("获取用户信息失败:", error);
+    alert("获取用户信息失败，请稍后再试！");
+  }
+};
+const fetchrechargeAmount = async () => {
+  try {
+    // 发送请求
+    const response = await axios.post(
+		`http://localhost:5000/staff/statements/new_recharge`,
+		time_slot.value,
+		{
+			headers: {
+			'Content-Type': 'application/json',
+			},
+		});
+    // 响应处理
+    console.log(response.data.data);
+	  if (response.data.code === 200) {
+		// 填充用户信息
+		rechargeAmount.value = response.data.data.total;
+		rechargeAmountData.value = response.data.data.items;
+		console.log("用户信息已填充！");
+    } else {
+      	alert("不存在该会员！");
+    }
+  } catch (error) {
+    console.error("获取用户信息失败:", error);
+    alert("获取用户信息失败，请稍后再试！");
+  }
+};
+
+const updateData = async (opt:number=0) => {
+	time_slot.value = time_slots[opt];
+	fetchNewMember();
+	fetchMemberTraffic();
+	fetchrechargeAmount();
+}
+updateData()
 </script>
 
