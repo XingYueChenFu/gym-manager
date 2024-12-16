@@ -29,6 +29,7 @@ def query_record(id):
     """
     if request.method == 'OPTIONS':
         return jsonify({'msg': 'CORS preflight response'}), 200
+    
     # 查询member_id的RechargeRecord、ConsumeRecord、UsageCount、ExpirationTime
     member_id = id
     usage_counts = db.session.query(UsageCount).filter_by(member_id=member_id).all()
@@ -46,23 +47,23 @@ def query_record(id):
                                                         RechargeRecord.activity_id == Deal.activity_id, 
                                                         RechargeRecord.plan_id == Deal.plan_id).all()
     # 根据r_d得到
-    recharge_count = [] # recharge_type=='count'的充值记录
-    recharge_time = [] # recharge_type=='time'的充值记录
+    recharge_type_count = [] # recharge_type=='count'的充值记录
+    recharge_type_time = [] # recharge_type=='time'的充值记录
     for r, d in r_d:
         if d.recharge_type == 'time':
-            recharge_time.append((r, d))
+            recharge_type_time.append((r, d))
         elif d.recharge_type == 'count':
-            recharge_count.append((r, d))
+            recharge_type_count.append((r, d))
     # 按照recharge_count的deadline排序 # 降序
-    recharge_count = sorted(recharge_count, key=lambda x: x[1].lifespan, reverse=True)        
+    recharge_type_count = sorted(recharge_type_count, key=lambda x: x[1].recharge_time, reverse=True)        
     # 按照recharge_time的deadline排序 # 降序
-    recharge_time = sorted(recharge_time, key=lambda x: x[1].lifespan, reverse=True) 
+    recharge_type_time = sorted(recharge_type_time, key=lambda x: x[1].recharge_time, reverse=True) 
     
 
     counts = []                                            # ----- 输出数据2 -----
     times = []                                             # ----- 输出数据4 -----
     # 从recharge_count中获取count
-    for r, d in recharge_count:
+    for r, d in recharge_type_count:
         counts.append({
             'time': r.recharge_time.strftime('%Y-%m-%d %H:%M:%S'),
             'deadline': r.recharge_time + timedelta(days=d.lifespan),
@@ -70,7 +71,7 @@ def query_record(id):
             'amount': d.amount
         })
     # 从recharge_time中获取count
-    for r, d in recharge_time:
+    for r, d in recharge_type_time:
         times.append({
             'time': r.recharge_time.strftime('%Y-%m-%d %H:%M:%S'),
             'deadline': r.recharge_time + timedelta(days=d.lifespan),
