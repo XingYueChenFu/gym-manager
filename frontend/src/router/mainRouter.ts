@@ -6,6 +6,7 @@ import MemberAddView from '../views/MemberAddView.vue'
 import MemberDetailView from '../views/MemberDetailView.vue'
 import RechargeView from '../views/RechageView.vue'
 import RecordView from '../views/RecordView.vue'
+import ActivityView from '@/views/ActivityView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -16,6 +17,7 @@ const router = createRouter({
     { path: '/member/detail', name: 'memberDetail', component: MemberDetailView, },
     { path: '/member/record', name: 'memberRecord', component: RecordView, },
     { path: '/member/recharge', name: 'memberRecharge', component: RechargeView, },
+    { path: '/Activity', name: 'activity', component: ActivityView, },
     // {
     //   path: '/',
     //   name: 'signin',

@@ -9,11 +9,24 @@
 				</router-link>
 			</li>
 			<li class="nav-item">
+				<router-link to="/Activity" class="nav-link">
+					<i class="bi bi-fire menu-icon"></i>
+					<span class="menu-title">Activity</span>
+				</router-link>
+			</li>
+			<li class="nav-item">
 				<router-link to="/search" class="nav-link">
 					<i class="icon-search menu-icon"></i>
 					<span class="menu-title">Search</span>
 				</router-link>
 			</li>
+			<li class="nav-item">
+				<router-link to="/member/add" class="nav-link">
+					<i class="bi bi-person-plus-fill menu-icon"></i>
+					<span class="menu-title">Add new member</span>
+				</router-link>
+			</li>
+
 			<li class="nav-item">
 				<a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false"
 					aria-controls="ui-basic">
@@ -38,6 +51,7 @@
 					</ul>
 				</div>
 			</li>
+
 			<li class="nav-item">
 				<a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false"
 					aria-controls="form-elements">

@@ -9,11 +9,24 @@
 				</router-link>
 			</li>
 			<li class="nav-item">
+				<router-link to="/Activity" class="nav-link">
+					<i class="bi bi-fire menu-icon"></i>
+					<span class="menu-title">Activity</span>
+				</router-link>
+			</li>
+			<li class="nav-item">
 				<router-link to="/search" class="nav-link">
 					<i class="icon-search menu-icon"></i>
 					<span class="menu-title">Search</span>
 				</router-link>
 			</li>
+			<li class="nav-item">
+				<router-link to="/member/add" class="nav-link">
+					<i class="bi bi-person-plus-fill menu-icon"></i>
+					<span class="menu-title">Add new member</span>
+				</router-link>
+			</li>
+
 			<li class="nav-item">
 				<a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false"
 					aria-controls="ui-basic">
@@ -38,6 +51,7 @@
 					</ul>
 				</div>
 			</li>
+
 			<li class="nav-item">
 				<a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false"
 					aria-controls="form-elements">
@@ -144,7 +158,7 @@
 						<div class="justify-content-end d-flex">
 							<button class="btn btn-light" @click="memberConsume">Consume</button>
 							<span style="width: 2vh;"></span>
-							<button class="btn btn-primary" @click="memberRechargeForm">Rechage</button>
+							<button class="btn btn-primary" ><router-link to="/member/Recharge" class="nav-link">Rechage</router-link></button>
 						</div>
 					</div>
 				</div>
@@ -255,26 +269,6 @@ interface Item {
   rate: number;        // 时间过去的比例
   amount: number;      // 充值的金额
 }
-
-interface opt {
-//   id: string;        // 充值的时间
-//   : string;    // 截止的时间 or none
-    'activity_id': number,
-	'plan_id': number,
-	'activity_name': string,
-	'start_time': string,
-	'end_time': string,
-	'recharge_type': string,
-	'recharge_count': number,
-	'lifespan': number,
-	'recharge_day': number,
-	'amount': string,
-	'activity_remark': string
-}
-
-
-const opts = ref<opt[]>([]);
-
 
 // 定义响应式数据存储表格项
 const total_count = ref<number>(0);
@@ -390,31 +384,5 @@ const memberConsume = async () => {
     console.error("获取用户信息失败:", error);
     alert("获取用户信息失败，请稍后再试！");
   }
-};
-
-const memberRechargeForm = async () => {
-	if (isVisible.value === false)
-		try {
-		// 发送请求
-		const response = await axios.post(
-		`http://localhost:5000/staff/query/deal/now`,
-		{
-			headers: {
-			'Content-Type': 'application/json',
-			},
-		});
-		// 响应处理
-		console.log("活动号：", response.data);
-		if (response.data.code === 200) {
-			opts.value = response.data.data;
-		} else {
-
-			return;
-		}
-	} catch (error) {
-		console.error("获取活动信息失败:", error);
-		alert("获取活动信息失败，请稍后再试！");
-	}
-	isVisible.value = !(isVisible.value)
 };
 </script>

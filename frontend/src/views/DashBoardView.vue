@@ -9,11 +9,24 @@
 				</router-link>
 			</li>
 			<li class="nav-item">
+				<router-link to="/Activity" class="nav-link">
+					<i class="bi bi-fire menu-icon"></i>
+					<span class="menu-title">Activity</span>
+				</router-link>
+			</li>
+			<li class="nav-item">
 				<router-link to="/search" class="nav-link">
 					<i class="icon-search menu-icon"></i>
 					<span class="menu-title">Search</span>
 				</router-link>
 			</li>
+			<li class="nav-item">
+				<router-link to="/member/add" class="nav-link">
+					<i class="bi bi-person-plus-fill menu-icon"></i>
+					<span class="menu-title">Add new member</span>
+				</router-link>
+			</li>
+
 			<li class="nav-item">
 				<a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false"
 					aria-controls="ui-basic">
@@ -38,6 +51,7 @@
 					</ul>
 				</div>
 			</li>
+
 			<li class="nav-item">
 				<a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false"
 					aria-controls="form-elements">
@@ -1183,6 +1197,41 @@ const selectDate = (opt: number) => {
         console.error('Invalid option index:', opt);
     }
 };
+
+// 获取用户充值和消费记录的函数
+const fetchData = async () => {
+  try {
+    // 发送请求
+    const response = await axios.post(
+      `http://localhost:5000/staff/query/record/${memberId}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    // 响应处理
+    console.log(response.data.data);
+	  if (response.data.code === 200) {
+		total_count.value = response.data.data.total_count;  // 将返回数据赋值给 items
+		total_time.value = response.data.data.total_time;  // 将返回数据赋值给 items
+		counts.value = response.data.data.counts;  // 将返回数据赋值给 items
+		times.value = response.data.data.times;  // 将返回数据赋值给 items
+		counts.value.forEach((item) => {
+			item.rate = calculateTimeRatio(item.time, item.deadline);
+		});
+		times.value.forEach((item) => {
+			item.rate = calculateTimeRatio(item.time, item.deadline);
+		});
+		console.log("用户信息已填充！");
+    } else {
+      	alert("不存在该会员！");
+    }
+  } catch (error) {
+    console.error("获取用户信息失败:", error);
+    alert("获取用户信息失败，请稍后再试！");
+  }
+};
+fetchData();
 
 </script>
 
