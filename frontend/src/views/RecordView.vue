@@ -406,7 +406,7 @@ const memberRechargeForm = async () => {
 		// 响应处理
 		console.log("活动号：", response.data);
 		if (response.data.code === 200) {
-			opts = response.data.data;
+			opts.value = response.data.data;
 		} else {
 
 			return;
