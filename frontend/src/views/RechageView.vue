@@ -292,7 +292,7 @@ const calculateTimeRatio = (time:string, deadline:string) => {
   // 计算比例
   const ratio = (elapsedDuration / totalDuration) * 100;
 
-  return ratio; // 返回保留两位小数的百分比
+  return Math.floor(ratio); // 返回保留整数部分的百分比
 };
 
 // 示例输入
@@ -350,7 +350,7 @@ const memberConsume = async () => {
   try {
     // 发送请求
     const response = await axios.post(
-      `http://localhost:5000/staff/query/consume/${memberId}`, //
+      `http://localhost:5000/staff/consume/${memberId}`, //
       {
         headers: {
           'Content-Type': 'application/json',
