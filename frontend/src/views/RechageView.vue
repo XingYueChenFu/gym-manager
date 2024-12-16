@@ -136,15 +136,32 @@
           <div class="card">
             <div class="card-body">
 				<div class="row">
-              <h4 class="col-4 card-title">Consumption And Recharge Records</h4>
-              <div class="col-8">
-                <div class="justify-content-end d-flex">
-                  <button class="btn btn-light" @click="memberConsume">Consume</button>
-                  <span style="width: 2vh;"></span>
-                  <!-- <button type="button" class="btn btn-primary" @click="memberRechargeForm">Rechage</button> -->
-                </div>
-              </div>
-            </div>
+					<h4 class="col-4 card-title">Consumption And Recharge Records</h4>
+					<div class="col-8">
+						<div class="justify-content-end d-flex">
+							<button class="btn btn-light" @click="memberConsume">Consume</button>
+							<span style="width: 2vh;"></span>
+							<button class="btn btn-primary" @click="memberRechargeForm">Rechage</button>
+						</div>
+					</div>
+				</div>
+				<div class="card " v-if="isVisible">
+					<div class="row justify-content-end d-flex pt-2">
+						<div class="col-md-4">
+							<!-- <label class="col-sm-3 col-form-label">Gender</label> -->
+							<div class="form-group row">
+								<div class="col-sm-12">
+									<select class="form-select">
+										<option v-for="(opt, index) in opt_act" :key="index">{{opt.value}}</option>
+									</select>
+									<select class="form-select mt-3">
+										<option v-for="(opt, index) in opt_plan" :key="index">{{opt.value}}</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			  <p class="card-description"> Count </p>
               <div class="table-responsive pb-3">
                  <table class="table table-bordered"> <!-- table-bordered -->
@@ -160,19 +177,6 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-						<td> 1 </td>
-						<td> 2025-07-16 22:09:441 </td>
-						<td> 2027-07-16 22:09:441 </td>
-                        <td> 20 </td>
-					  	<td>
-							<div class="progress" style="height: 20px;">
-								<div class="progress-bar bg-primary" role="progressbar" style="width: 30%;">30</div>
-								<div class="progress-bar bg-success" role="progressbar" style="width: 40%;">70</div>
-							</div>
-						</td>
-						<td> $ 77.99 </td>
-                    </tr>
                     <tr v-for="(item, index) in counts" :key="index">
 						<td>{{ `${index+1}` }}</td>
 						<td>{{ item.time }}</td>           <!-- 充值时间 -->
@@ -239,6 +243,7 @@ const router = useRouter();
 const memberStore = useMemberStore();
 const memberId = memberStore.$state.memberInfo.member_id;
 console.log(memberStore.$state.memberInfo.member_id);  // 要展示的 member_id
+const isVisible = ref<boolean>(false);
 // 定义表格项的接口
 interface Item {
   time: string;        // 充值的时间
@@ -247,6 +252,16 @@ interface Item {
   rate: number;        // 时间过去的比例
   amount: number;      // 充值的金额
 }
+
+interface opt {
+  id: string;        // 充值的时间
+  : string;    // 截止的时间 or none
+}
+
+
+const opt = ref<string[]>(['count', 'time']);
+
+
 // 定义响应式数据存储表格项
 const total_count = ref<number>(0);
 const total_time = ref<number>(0);
@@ -273,8 +288,8 @@ const times = ref<Item[]>([
 
 const calculateTimeRatio = (time:string, deadline:string) => {
   // 将时间字符串解析为 Date 对象
-  const startTime = new Date(time).getTime();;
-  const endTime = new Date(deadline).getTime();;
+  const startTime = new Date(time).getTime();
+  const endTime = new Date(deadline).getTime();
   const now = Date.now() // new Date().getTime(); // 当前时间
 
   // 检查时间有效性
@@ -372,5 +387,30 @@ const memberConsume = async () => {
   }
 };
 
-// memberRechargeForm
+const memberRechargeForm = async () => {
+	isVisible.value = !(isVisible.value)
+  	try {
+		// 发送请求
+		const response = await axios.post(
+		`http://localhost:5000/staff/query/deal/now`,
+		{
+			headers: {
+			'Content-Type': 'application/json',
+			},
+		});
+		// 响应处理
+		console.log(response.data.data);
+		if (response.data.code === 200) {
+			console.log("消费成功！");
+			alert("消费成功！");
+			fetchMemberReCharge();
+		} else {
+			alert("无剩余次数！请先充值！");
+			return;
+		}
+	} catch (error) {
+		console.error("获取用户信息失败:", error);
+		alert("获取用户信息失败，请稍后再试！");
+	}
+};
 </script>
