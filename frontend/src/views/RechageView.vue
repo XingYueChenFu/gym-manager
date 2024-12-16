@@ -135,7 +135,16 @@
         <div class="col-lg-12 grid-margin stretch-card">
           <div class="card">
             <div class="card-body">
-              <h4 class="card-title">Consumption And Recharge Records</h4>
+				<div class="row">
+              <h4 class="col-4 card-title">Consumption And Recharge Records</h4>
+              <div class="col-8">
+                <div class="justify-content-end d-flex">
+                  <button class="btn btn-light" @click="memberConsume">Consume</button>
+                  <span style="width: 2vh;"></span>
+                  <!-- <button type="button" class="btn btn-primary" @click="memberRechargeForm">Rechage</button> -->
+                </div>
+              </div>
+            </div>
 			  <p class="card-description"> Count </p>
               <div class="table-responsive pb-3">
                  <table class="table table-bordered"> <!-- table-bordered -->
@@ -336,4 +345,32 @@ const fetchMemberReCharge = async () => {
   }
 };
 fetchMemberReCharge();
+
+const memberConsume = async () => {
+  try {
+    // 发送请求
+    const response = await axios.post(
+      `http://localhost:5000/staff/query/consume/${memberId}`, //
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    // 响应处理
+    console.log(response.data.data);
+	if (response.data.code === 200) {
+		console.log("消费成功！");
+		alert("消费成功！");
+		fetchMemberReCharge();
+	} else {
+		alert("无剩余次数！请先充值！");
+		return;
+    }
+  } catch (error) {
+    console.error("获取用户信息失败:", error);
+    alert("获取用户信息失败，请稍后再试！");
+  }
+};
+
+// memberRechargeForm
 </script>

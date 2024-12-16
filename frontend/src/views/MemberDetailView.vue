@@ -137,9 +137,9 @@
               <h4 class="col-4 card-title">Member Information</h4>
               <div class="col-8">
                 <div class="justify-content-end d-flex">
-                  <button class="btn btn-light mb-2" @click="handleCancel">Cancel</button>
-                  <span style="width: 4px;"></span>
-                  <button type="button" class="btn btn-primary mb-2" @click="handleSave">Save</button>
+                  <button class="btn btn-light" @click="handleCancel">Cancel</button>
+                  <span style="width: 2vh;"></span>
+                  <button type="button" class="btn btn-primary" @click="handleSave">Save</button>
                 </div>
               </div>
             </div>
