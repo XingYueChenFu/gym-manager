@@ -30,6 +30,9 @@
 							<router-link to="/member/add" class="nav-link">Add new member</router-link>
 						</li>
 						<li class="nav-item">
+							<router-link to="/member/record" class="nav-link">Record</router-link>
+						</li>
+						<li class="nav-item">
 							<router-link to="/member/recharge" class="nav-link">Recharge</router-link>
 						</li>
 					</ul>
