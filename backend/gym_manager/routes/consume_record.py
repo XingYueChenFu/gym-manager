@@ -78,8 +78,36 @@ def staff_consume(id):
 # @login_required
 # @permission(1)
 def staff_query_consume_record_by_id(id):
+    """
+    传入参数：json
+    {
+        page: int,
+        per_page: int
+    }
+    
+    """
     if request.method == 'OPTIONS':
         return jsonify({'msg': 'CORS preflight response'}), 200
     
     member_id = id
+    page = request.json.get('page', 1)
+    per_page = request.json.get('per_page', 10)
+    
+    consume_records = db.session.query(ConsumeRecord).filter_by(member_id=member_id).order_by(desc(ConsumeRecord.consume_time))
+    total = (consume_records.count() - 1) // per_page + 1
+    consume_records = consume_records.paginate(page=page, per_page=per_page)
+    
+    result = {
+        'msg': '成功',
+        'code': 200,
+        'data': {
+            'total': total,
+            'page': page,
+            'per_page': per_page,
+            'consume_records': [c_r.to_json() for c_r in consume_records]
+        }
+    }
+    
+    return jsonify(result), 200
+    
     

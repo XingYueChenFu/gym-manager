@@ -19,14 +19,37 @@ from datetime import datetime
 # @login_required
 # @permission(2)
 def staff_add_deal():
+    """
+    传入json:
+    'data': [
+        {'activity_name': xxx,
+         'start_time': xxx,
+         'end_time': xxx,
+         'recharge_type': xxx,
+         'recharge_count': xxx,
+         'lifespan': xxx,
+         'recharge_day': xxx,
+         'amount': xxx,
+         'activity_remark': xxx
+         },
+        ]
+    """
     if request.method == 'OPTIONS':  
         return jsonify({'msg': 'CORS preflight response'}), 200
     # 接收一个列表，包含同一activity_id的多个plan_id
     data = request.json.get('data')
+    # 从Deal中找到最大的activity_id
+    max_activity_id = db.session.query(db.func.max(Deal.activity_id)).scalar()
+    if max_activity_id is None:
+        max_activity_id = 0
+    this_activity_id = max_activity_id + 1
+    this_plan_id = 1
+    
     for item in data:
         deal = Deal()
-        deal.activity_id = item.get('activity_id')
-        deal.plan_id = item.get('plan_id')
+        deal.activity_id = this_activity_id
+        deal.plan_id = this_plan_id
+        this_plan_id += 1
         
         deal.activity_name = item.get('activity_name')
         deal.start_time = item.get('start_time')
@@ -146,9 +169,27 @@ def staff_get_deal_now():
     now = datetime.now()
     deals = Deal.query.filter(Deal.start_time <= now, Deal.end_time >= now).all()
     if deals is None:
-        return jsonify({'msg': '数据不存在', 'code': 5005})
+        return jsonify({'msg': '数据不存在', 'code': 5005, 'data': None})
     data = []
     for deal in deals:
         data.append(deal.to_json())
     return jsonify({'msg': '成功', 'code': 200, 'data': data})
+    """
+    输出的data:
+    [
+        {
+            'activity_id': int,
+            'plan_id': int,
+            'activity_name': str,
+            'start_time': str,
+            'end_time': str,
+            'recharge_type': str,
+            'recharge_count': int,
+            'lifespan': int,
+            'recharge_day': int,
+            'amount': str,
+            'activity_remark': str
+        },
+    ]
+    """
 
