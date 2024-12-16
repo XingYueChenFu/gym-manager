@@ -108,6 +108,37 @@ def superuser_index_get():
     return render_template('superuser/index.html')
 
 # ===== add table data =====
+@super_bp.route('/add_deal/now', methods=['GET', 'OPTIONS'])
+def add_deal_get():
+    max_activity_id = db.session.query(db.func.max(Deal.activity_id)).scalar()
+    if max_activity_id is None:
+        max_activity_id = 0
+    this_activity_id = max_activity_id + 1
+    this_plan_id = 0
+    
+    for i in range(4):
+        deal = Deal()
+        deal.activity_id = this_activity_id
+        deal.plan_id = this_plan_id
+        this_plan_id += 1
+        
+        deal.activity_name = '当前有效的活动'
+        deal.start_time = datetime.now()
+        deal.end_time = datetime.now() + timedelta(days=365*10)
+        
+        deal.recharge_type = random.choice(['time', 'count'])
+        if deal.recharge_type == 'time':
+            deal.recharge_day = random.randrange(1, 30, 1)
+            deal.amount = random.uniform(10, 1000)
+        else:
+            deal.recharge_count = random.randrange(1, 30, 1)
+            deal.lifespan = random.randrange(30, 365*10, 30)
+            deal.amount = random.uniform(10, 1000)
+        deal.activity_remark = '当前有效的活动'
+        db.session.add(deal)
+    db.session.commit()
+    return '添加活动成功'
+    pass
 
 @super_bp.route('/add_member', methods=['GET', 'OPTIONS'])
 def add_member_get():

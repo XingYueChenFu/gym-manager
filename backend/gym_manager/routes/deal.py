@@ -43,7 +43,7 @@ def staff_add_deal():
     if max_activity_id is None:
         max_activity_id = 0
     this_activity_id = max_activity_id + 1
-    this_plan_id = 1
+    this_plan_id = 0
     
     for item in data:
         deal = Deal()
