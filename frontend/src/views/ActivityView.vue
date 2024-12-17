@@ -133,6 +133,7 @@
                             <th>No.</th>       <!-- plan_id -->
                             <th>Content</th>    <!-- recharge_conut/lifespan - recharge_day -->
                             <th>Amount</th>    <!-- amount -->
+                            <!-- <th>Image</th> -->
                           </tr>
                         </thead>
                         <tbody>
@@ -142,6 +143,7 @@
 								<td>{{ opt.plan_id }}</td>
 								<td>{{ opt.obtain }}</td>
 								<td>{{ opt.amount }}元</td>
+								<!-- <td>{{ opt.src }}元</td> -->
 							</tr>
                         </tbody>
                       </table>
