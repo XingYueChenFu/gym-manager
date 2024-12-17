@@ -128,6 +128,7 @@
                       <table class="table">
                         <thead>
                           <tr>
+                            <th>#</th>  <!-- activity_name -->
                             <th>Activity</th>  <!-- activity_name -->
                             <th>No.</th>       <!-- plan_id -->
                             <th>Content</th>    <!-- recharge_conut/lifespan - recharge_day -->
@@ -136,6 +137,7 @@
                         </thead>
                         <tbody>
 						  	<tr v-for="(opt, index) in opts" :key="index" @click="cheakDetail(index)">
+								<td>{{ index }}</td>
 								<td>{{ opt.activity_name }}</td>
 								<td>{{ opt.plan_id }}</td>
 								<td>{{ opt.obtain }}</td>
