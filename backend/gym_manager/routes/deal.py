@@ -125,6 +125,8 @@ def staff_modify_deal():
         
         deal.amount = request.json.get('amount')
         deal.activity_remark = request.json.get('activity_remark')
+        
+        db.session.add(deal)
     try:
         db.session.commit()
         return jsonify({'msg': '成功', 'code': 200}) # 前端：修改成功
