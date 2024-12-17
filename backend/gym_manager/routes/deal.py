@@ -51,17 +51,26 @@ def staff_add_deal():
         deal.plan_id = this_plan_id
         this_plan_id += 1
         
-        deal.activity_name = item.get('activity_name')
-        deal.start_time = item.get('start_time')
-        deal.end_time = item.get('end_time')
+        # deal.activity_name = item.get('activity_name')
+        # deal.start_time = item.get('start_time')
+        # deal.end_time = item.get('end_time')
+        deal.activity_name = item['activity_name']
+        deal.start_time = item['start_time']
+        deal.end_time = item['end_time']
         
-        deal.recharge_type = item.get('recharge_type')
-        deal.recharge_count = item.get('recharge_count')
-        deal.lifespan = item.get('lifespan')
-        deal.recharge_day = item.get('recharge_day')
+        # deal.recharge_type = item.get('recharge_type')
+        # deal.recharge_count = item.get('recharge_count')
+        # deal.lifespan = item.get('lifespan')
+        # deal.recharge_day = item.get('recharge_day')
+        deal.recharge_type = item['recharge_type']
+        deal.recharge_count = item['recharge_count']
+        deal.lifespan = item['lifespan']
+        deal.recharge_day = item['recharge_day']
         
-        deal.amount = item.get('amount')
-        deal.activity_remark = item.get('activity_remark')
+        # deal.amount = item.get('amount')
+        # deal.activity_remark = item.get('activity_remark')
+        deal.amount = item['amount']
+        deal.activity_remark = item['activity_remark']
         
         db.session.add(deal)
     try:
@@ -112,26 +121,33 @@ def staff_modify_deal():
     data = request.json.get('data')
     for item in data:
         deal = Deal.query.filter_by(activity_id=item.get('activity_id'), plan_id=item.get('plan_id')).first()
-        deal.activity_id = item.get('activity_id')
-        deal.plan_id = item.get('plan_id')
-        deal.activity_name = item.get('activity_name')
-        deal.start_time = item.get('start_time')
-        deal.end_time = item.get('end_time')
+        deal.activity_id = item['activity_id']
+        deal.plan_id = item['plan_id']
+        deal.activity_name = item['activity_name']
+        deal.start_time = item['start_time']
+        deal.end_time = item['end_time']
         
-        deal.recharge_type = request.json.get('recharge_type')
-        deal.recharge_count = request.json.get('recharge_count')
-        deal.lifespan = request.json.get('lifespan')
-        deal.recharge_day = request.json.get('recharge_day')
+        # deal.recharge_type = request.json.get('recharge_type')
+        deal.recharge_type = item['recharge_type']
+        # deal.recharge_count = request.json.get('recharge_count')
+        deal.recharge_count = item['recharge_count']
+        # deal.lifespan = request.json.get('lifespan')
+        deal.lifespan = item['lifespan']
+        # deal.recharge_day = request.json.get('recharge_day')
+        deal.recharge_day = item['recharge_day']
         
-        deal.amount = request.json.get('amount')
-        deal.activity_remark = request.json.get('activity_remark')
+        # deal.amount = request.json.get('amount')
+        deal.amount = item['amount']
+        # deal.activity_remark = request.json.get('activity_remark')
+        deal.activity_remark = item['activity_remark']
         
-        db.session.add(deal)
+        # db.session.add(deal)
     try:
         db.session.commit()
         return jsonify({'msg': '成功', 'code': 200}) # 前端：修改成功
     except Exception as e:
         db.session.rollback()
+        print(e)
         return jsonify({'msg': '数据修改失败', 'code': 5003})
 
 # [开发中] 查询活动详情 <id>
