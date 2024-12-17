@@ -247,7 +247,7 @@ const handleSubmit = async () => {
 
     const response = await axios.post(
       path,
-      payload,
+      {data: [payload,]},
       {
         headers: {
           'Content-Type': 'application/json',
